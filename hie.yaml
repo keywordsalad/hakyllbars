@@ -1,0 +1,7 @@
+cradle:
+  stack:
+    - path: "./src"
+      component: "hakyllbars:lib"
+
+    - path: "./test"
+      component: "hakyllbars:test:test"

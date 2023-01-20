@@ -1,0 +1,113 @@
+name: hakyllbars
+version: 0.1.0.0
+git: https://github.com/keywordsalad/hakyllbars
+license: BSD3
+author: Logan McGrath
+maintainer: "logan.mcgrath@thisfieldwas.green"
+copyright: "Copyright (C) 2021-2023 Logan McGrath"
+
+extra-source-files:
+  - README.md
+
+description: Please see the README at <https://github.com/keywordsalad/hakyllbars#readme>
+
+dependencies:
+  - base >= 4.14 && < 5
+  - hakyll >= 4.15.0.0 && < 5
+
+library:
+  source-dirs: src
+  dependencies:
+    - aeson
+    - binary
+    - bytestring
+    - data-default
+    - directory
+    - filepath
+    - hakyll
+    - MissingH
+    - mtl
+    - network-uri
+    - pandoc
+    - parsec
+    - process
+    - scientific
+    - text
+    - time
+    - unordered-containers
+    - vector
+    - yaml
+
+tests:
+  test:
+    main: Spec.hs
+    source-dirs: test
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - containers
+      - hakyll
+      - hakyllbars
+      - hspec
+      - parsec
+      - time
+
+default-extensions:
+  - BangPatterns
+  - BinaryLiterals
+  - BlockArguments
+  - ConstraintKinds
+  - DataKinds
+  - DefaultSignatures
+  - DeriveDataTypeable
+  - DeriveFoldable
+  - DeriveFunctor
+  - DeriveGeneric
+  - DeriveTraversable
+  - DoAndIfThenElse
+  - EmptyDataDecls
+  - ExistentialQuantification
+  - FlexibleContexts
+  - FlexibleInstances
+  - FunctionalDependencies
+  - GADTs
+  - GeneralizedNewtypeDeriving
+  - InstanceSigs
+  - KindSignatures
+  - LambdaCase
+  - MultiParamTypeClasses
+  - MultiWayIf
+  - NamedFieldPuns
+  - OverloadedStrings
+  - PartialTypeSignatures
+  - PatternGuards
+  - PatternSynonyms
+  - PolyKinds
+  - RankNTypes
+  - RecordWildCards
+  - ScopedTypeVariables
+  - StandaloneDeriving
+  - TemplateHaskell
+  - TupleSections
+  - TypeFamilies
+  - TypeSynonymInstances
+  - UndecidableInstances
+  - ViewPatterns
+
+ghc-options:
+  - -fprint-potential-instances
+  - -Wall
+  - -Werror
+  - -Wcompat
+  - -Widentities
+  - -Wincomplete-patterns
+  - -Wincomplete-record-updates
+  - -Wincomplete-uni-patterns
+  - -Wmissing-home-modules
+  - -Wname-shadowing
+  - -Wpartial-fields
+  - -Wredundant-constraints
+  - -Wunused-packages
+  - -Wunused-type-patterns
