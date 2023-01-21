@@ -16,19 +16,37 @@ _verify-prerequisites () {
 }
 
 ⚡build () {
-  _help-line "Compile the site generator and generate the site"
+  _help-line "Compile Hakyllbars and generate the site"
   stack build
+  ⚡build_site
+}
+
+⚡build_site() {
+  _help-line "Generate the site"
+  stack exec site build
 }
 
 ⚡clean () {
-  _help-line "Clean compiled output"
+  _help-line "Clean everything"
+  ⚡clean_site
   stack clean
 }
 
+⚡clean_site () {
+  _help-line "Clean the generated site"
+  stack exec site clean
+}
+
 ⚡rebuild () {
-  _help-line "Clean and then rebuild"
+  _help-line "Clean and rebuild everything"
   ⚡clean
   ⚡build "$@"
+}
+
+⚡rebuild_site() {
+  _help-line "Clean and regenerate the site"
+  ⚡clean_site
+  ⚡build_site
 }
 
 ⚡test () {

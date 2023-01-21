@@ -4,16 +4,18 @@ module Hakyllbars.Template
     fileTemplate,
     applyCompiler,
     applyContext,
+    applyTemplate,
+    applyAsTemplate,
   )
 where
 
 import Control.Monad.State.Strict (evalStateT)
 import Hakyll (defaultHakyllReaderOptions, defaultHakyllWriterOptions)
 import Hakyllbars.Common
-import Hakyllbars.Compiler
+import Hakyllbars.Compiler (applyAsTemplate, applyTemplate)
 import Hakyllbars.Context
-import Hakyllbars.Pandoc
-import Text.Pandoc
+import Hakyllbars.Pandoc (pandocCompilerWith)
+import Text.Pandoc (ReaderOptions, WriterOptions)
 
 applyTemplates :: TemplateRunner a () -> Item a -> Compiler (Item a)
 applyTemplates templates item =

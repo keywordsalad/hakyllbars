@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" prefix="og: https://ogp.me/ns#">
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{#if description}}<meta name="description" content="{{description | escapeHtml}}">{{#end-}}
+<title>Hakyllbars: Advanced templates for Hakyll | {{title}}</title>
+<link rel="canonical" href="{{url}}">
+<link rel="stylesheet" href="{{getUrl 'css/main.css'}}">
+
+</head>
+<body>
+
+<h1>{{title}}</h1>
+
+{{body}}
+
+</body>

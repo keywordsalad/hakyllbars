@@ -38,6 +38,18 @@ library:
     - vector
     - yaml
 
+executables:
+  site:
+    source-dirs: site
+    main: Main.hs
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - hakyll
+      - hakyllbars
+
 tests:
   test:
     main: Spec.hs

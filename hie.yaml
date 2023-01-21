@@ -3,5 +3,8 @@ cradle:
     - path: "./src"
       component: "hakyllbars:lib"
 
+    - path: "./site"
+      component: "hakyllbars:exe:site"
+
     - path: "./test"
       component: "hakyllbars:test:test"
