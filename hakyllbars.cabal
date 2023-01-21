@@ -155,7 +155,8 @@ executable site
       ViewPatterns
   ghc-options: -fprint-potential-instances -Wall -Werror -Wcompat -Widentities -Wincomplete-patterns -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wname-shadowing -Wpartial-fields -Wredundant-constraints -Wunused-packages -Wunused-type-patterns -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.14 && <5
+      MissingH
+    , base >=4.14 && <5
     , hakyll
     , hakyllbars
   default-language: Haskell2010

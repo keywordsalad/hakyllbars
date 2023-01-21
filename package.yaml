@@ -49,6 +49,7 @@ executables:
     dependencies:
       - hakyll
       - hakyllbars
+      - MissingH
 
 tests:
   test:

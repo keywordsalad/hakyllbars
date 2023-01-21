@@ -1,5 +1,7 @@
 module Main where
 
+import Data.List (isSuffixOf)
+import Data.String.Utils (join, split)
 import Hakyll hiding (Context, Template, applyTemplate, compileTemplateItem)
 import Hakyllbars
 
@@ -14,7 +16,7 @@ main = hakyllWith config do
   rulesExtraDependencies [cssDependencies, templatesDependency] do
     --
     match "*.md" do
-      route $ setExtension "html"
+      route $ setExtension "html" `composeRoutes` indexRoute
       compile do
         getResourceBody >>= applyTemplates do
           applyContext context
@@ -50,3 +52,13 @@ templates = do
       "_layouts/**"
         .||. "_partials/**"
         .||. "_templates/**"
+
+indexRoute :: Routes
+indexRoute = customRoute appendIndexHtml
+  where
+    appendIndexHtml = join "/" . reverse . indexIt . reverse . split "/" . toFilePath
+    indexIt [] = []
+    indexIt a@(x : xs)
+      | x == "index.html" = a
+      | ".html" `isSuffixOf` x = (head (split "." x) ++ "/index.html") : xs
+      | otherwise = a
