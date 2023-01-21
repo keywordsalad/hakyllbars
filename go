@@ -34,7 +34,7 @@ _verify-prerequisites () {
 
 ⚡clean_site () {
   _help-line "Clean the generated site"
-  stack exec site clean
+  rm -r _cache
 }
 
 ⚡rebuild () {

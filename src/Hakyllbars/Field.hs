@@ -54,7 +54,7 @@ defaultFields =
       urlField "url",
       absUrlField "absUrl" "siteRoot" "url",
       pathField "path",
-      getUrlField "getUrl",
+      getUrlField "getUrl" "siteRoot",
       getAbsUrlField "getAbsUrl" "siteRoot" "getUrl",
       putField "put",
       addField "add",
@@ -218,12 +218,15 @@ absUrlField key siteUrlKey urlKey = field key f
       url <- fromValue =<< unContext context urlKey
       return (siteUrl ++ url :: String)
 
-getUrlField :: String -> Context a
-getUrlField key = functionField key f
+getUrlField :: String -> String -> Context a
+getUrlField key siteRootKey = functionField key f
   where
     f (filePath :: FilePath) = do
+      context <- tplContext
+      siteRoot <- fromValue =<< unContext context siteRootKey
       let id' = fromFilePath filePath
-      getUri key id'
+      uri <- getUri key id'
+      return $ siteRoot ++ uri
 
 getAbsUrlField :: forall a. String -> String -> String -> Context a
 getAbsUrlField key siteUrlKey urlForKey = functionField key f

@@ -75,7 +75,8 @@ indexRoute = customRoute appendIndexHtml
 -- This uses Hakyllbars' Context, not Hakyll's
 context :: Context String
 context =
-  constField "codeStyle" (styleToCss haddock)
+  siteRootField "/hakyllbars"
+    <> constField "codeStyle" (styleToCss haddock)
     <> gitFields "site" "https://github.com/keywordsalad/hakyllbars/tree"
     <> layoutField "applyLayout" "_layouts" -- Configure layouts to load from _layouts/
     <> defaultFields -- Using the default fields is very recommended
