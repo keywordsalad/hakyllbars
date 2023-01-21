@@ -1,6 +1,7 @@
 module Hakyllbars.Template
   ( applyTemplates,
     applyContent,
+    applyContentWith,
     fileTemplate,
     applyCompiler,
     applyContext,

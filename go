@@ -18,11 +18,11 @@ _verify-prerequisites () {
 ⚡build () {
   _help-line "Compile Hakyllbars and generate the site"
   stack build
-  ⚡build_site
 }
 
-⚡build_site() {
+⚡build_site () {
   _help-line "Generate the site"
+  ⚡build
   stack exec site build
 }
 
@@ -43,10 +43,16 @@ _verify-prerequisites () {
   ⚡build "$@"
 }
 
-⚡rebuild_site() {
+⚡rebuild_site () {
   _help-line "Clean and regenerate the site"
   ⚡clean_site
   ⚡build_site
+}
+
+⚡watch_site () {
+  _help-line "Preview the site"
+  ⚡rebuild_site
+  stack exec site watch
 }
 
 ⚡test () {

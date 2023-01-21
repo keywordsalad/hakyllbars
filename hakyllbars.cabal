@@ -159,6 +159,7 @@ executable site
     , base >=4.14 && <5
     , hakyll
     , hakyllbars
+    , pandoc
   default-language: Haskell2010
 
 test-suite test

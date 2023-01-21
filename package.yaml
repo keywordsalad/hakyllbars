@@ -50,6 +50,7 @@ executables:
       - hakyll
       - hakyllbars
       - MissingH
+      - pandoc
 
 tests:
   test:
