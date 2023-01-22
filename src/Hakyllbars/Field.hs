@@ -71,7 +71,7 @@ defaultFields host siteRoot =
       metadataPriorityField "published" ["published", "created"],
       metadataField,
       titleFromFileField "title",
-      constField "description" ("" :: String),
+      constField "description" ("" :: String)
     ]
 
 emptyString :: ContextValue a
