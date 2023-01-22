@@ -105,7 +105,7 @@ Then a layout may be created and applied to the following template:
 title: How to apply a layout
 --
 {{@applyLayout 'post.html'}}
-<p>Step 1...</p>
+Step 1...
 -}}
 ```
 

@@ -34,7 +34,7 @@ _verify-prerequisites () {
 
 ⚡clean_site () {
   _help-line "Clean the generated site"
-  rm -r _cache
+  rm -rf _cache
 }
 
 ⚡rebuild () {

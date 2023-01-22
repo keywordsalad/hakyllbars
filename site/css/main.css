@@ -20,9 +20,7 @@ body {
   overflow: scroll;
 }
 
-body>header,
-body>main,
-body>footer {
+body>* {
   max-width: 65rem;
   padding: 0 1rem;
   margin: 0 auto;
