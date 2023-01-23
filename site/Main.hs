@@ -60,6 +60,7 @@ templates = do
       "_layouts/**"
         .||. "_partials/**"
         .||. "_templates/**"
+        .||. "_sections/**"
 
 pages :: DeployEnv -> Rules ()
 pages deployEnv = do
@@ -89,6 +90,7 @@ indexRoute = customRoute appendIndexHtml
 context :: DeployEnv -> HB.Context String
 context deployEnv =
   HB.gitFields "site" "https://github.com/keywordsalad/hakyllbars/tree"
+    <> HB.includeField "section" (Just "_sections") (Just ".md")
     -- Using the default fields is very recommended
     <> HB.defaultFields host siteRoot
   where
