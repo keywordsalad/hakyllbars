@@ -5,17 +5,20 @@
 <meta charset="utf-8">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>hakyllbars: Advanced templates for hakyll | Why another templating language?</title>
-<link rel="canonical" href="https://keywordsalad.github.io/hakyllbars/">
-<link rel="stylesheet" href="/hakyllbars/css/main.css">
-<link rel="stylesheet" href="/hakyllbars/css/code-style.css">
-<script src="/hakyllbars/js/main.js" async></script>
+<title>hakyllbars: advanced templates for hakyll | Why another templating language?</title>
+<link rel="canonical" href="http://localhost:8000/">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/code-style.css">
+<script src="/js/main.js" async></script>
 
 </head>
 <body>
 
 <header>
-  <h1>hakyllbars: Advanced templates for hakyll</h1>
+  <h1>
+    <a href="/">hakyllbars</a>:
+    advanced templates for <a href="https://jaspervdj.be/hakyll/">hakyll</a>
+  </h1>
 </header>
 
 <main>
@@ -52,7 +55,7 @@
 <p>This is equivalent to writing:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;{{htmlEscape (getAbsUrl &#39;sitemap.xml&#39;)}}&quot;</span><span class="kw">&gt;</span>Sitemap<span class="kw">&lt;/a&gt;</span></span></code></pre></div>
 <p>Helper functions are also used to define syntax, as in <a href="#conditions">conditionals</a> and <a href="#loops">loops</a>.</p>
-<p><strong><a href="/hakyllbars/helper-functions/">hakyllbars defines a number of helper functions by default!</a></strong></p>
+<p><strong><a href="/helper-functions/">hakyllbars defines a number of helper functions by default!</a></strong></p>
 <h3 id="layouts">Layouts</h3>
 <p>The file <code>example.md</code> declares <code>page</code> as its layout using the <code>appleLayout</code> helper function:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
