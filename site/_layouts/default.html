@@ -6,7 +6,7 @@
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {{#if description}}<meta name="description" content="{{description | escapeHtml}}">{{#end-}}
-<title>hakyllbars: Advanced templates for hakyll | {{title}}</title>
+<title>hakyllbars: advanced templates for hakyll | {{title}}</title>
 <link rel="canonical" href="{{absUrl}}">
 <link rel="stylesheet" href="{{getUrl 'css/main.css'}}">
 <link rel="stylesheet" href="{{getUrl 'css/code-style.css'}}">
@@ -16,7 +16,10 @@
 <body>
 
 <header>
-  <h1>hakyllbars: Advanced templates for hakyll</h1>
+  <h1>
+    <a href="{{getUrl 'index.md'}}">hakyllbars</a>:
+    advanced templates for <a href="https://jaspervdj.be/hakyll/">hakyll</a>
+  </h1>
 </header>
 
 <main>
