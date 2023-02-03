@@ -38,7 +38,7 @@ import Hakyllbars.Ast
 import Hakyllbars.Common
 import Hakyllbars.Compiler
 import Hakyllbars.Context
-import Hakyllbars.Field.Date (dateFields)
+import Hakyllbars.Field.Date (DateConfig, dateFields, defaultDateConfigWith)
 import Hakyllbars.Field.Git (gitFields)
 import Hakyllbars.Field.Html (escapeHtmlField, escapeHtmlUriField)
 import Hakyllbars.Util (stripSuffix)
@@ -56,6 +56,8 @@ defaultFields host siteRoot =
       getUrlField "getUrl" "siteRoot",
       getAbsUrlField "getAbsUrl" "host" "getUrl",
       linkedTitleField "linkedTitle" "title" "absUrl",
+      escapeHtmlField,
+      escapeHtmlUriField,
       putField "put",
       addField "add",
       putBlockField "putBlock",

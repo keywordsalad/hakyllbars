@@ -18,7 +18,13 @@ _See Hakyll's own template docs [here](https://jaspervdj.be/hakyll/tutorials/04-
 * [Loops](#loops)
 
 {{section 'variables'}}
-{{section 'helper-functions'}}
+
+### Helper functions
+
+{{partial 'helper-functions'}}
+
+**[Hakyllbars defines a number of helper functions by default!]({{getUrl 'helper-functions.md'}})**
+
 {{section 'layouts'}}
 {{section 'conditions'}}
 {{section 'loops'}}

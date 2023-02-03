@@ -51,6 +51,7 @@ executables:
       - hakyllbars
       - MissingH
       - pandoc
+      - time
 
 tests:
   test:

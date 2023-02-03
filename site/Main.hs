@@ -3,6 +3,7 @@ module Main where
 import Data.List (isSuffixOf)
 import Data.Maybe (fromMaybe)
 import Data.String.Utils (join, split)
+import Data.Time
 import Hakyll
 import Hakyllbars as HB
 import System.Environment (lookupEnv)
@@ -11,12 +12,14 @@ import Text.Pandoc.Highlighting (haddock, styleToCss)
 main :: IO ()
 main = do
   deployEnv <- fromMaybe Prod . ((=<<) deployEnvFromStr) <$> lookupEnv "DEPLOY"
+  time <- utcToZonedTime <$> getCurrentTimeZone <*> getCurrentTime
+  let dateConfig = defaultDateConfigWith defaultTimeLocale time
   hakyllWith config do
     css' <- css
     js' <- js
     templates' <- templates
     rulesExtraDependencies [css', js', templates'] do
-      pages deployEnv
+      pages deployEnv dateConfig
 
 config :: Configuration
 config =
@@ -62,15 +65,15 @@ templates = do
         .||. "_templates/**"
         .||. "_sections/**"
 
-pages :: DeployEnv -> Rules ()
-pages deployEnv = do
+pages :: DeployEnv -> HB.DateConfig -> Rules ()
+pages deployEnv dateConfig = do
   match "*.md" do
     route $ setExtension "html" `composeRoutes` indexRoute
     -- This is where Hakyllbars is applied
     compile do
       getResourceBody >>= HB.applyTemplates do
         -- Sets the root context used in the templates
-        HB.applyContext (context deployEnv)
+        HB.applyContext (context deployEnv dateConfig)
         -- Applies the item content as a template
         HB.applyContent
         -- Applies the final template
@@ -87,10 +90,12 @@ indexRoute = customRoute appendIndexHtml
       | otherwise = a
 
 -- This uses Hakyllbars' Context, not Hakyll's
-context :: DeployEnv -> HB.Context String
-context deployEnv =
+context :: DeployEnv -> HB.DateConfig -> HB.Context String
+context deployEnv dateConfig =
   HB.gitFields "site" "https://github.com/keywordsalad/hakyllbars/tree"
     <> HB.includeField "section" (Just "_sections") (Just ".md")
+    <> HB.includeField "partial" (Just "_partials") (Just ".md")
+    <> HB.dateFields dateConfig
     -- Using the default fields is very recommended
     <> HB.defaultFields host siteRoot
   where
