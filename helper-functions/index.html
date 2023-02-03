@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en" prefix="og: https://ogp.me/ns#">
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hakyllbars: Advanced templates for Hakyll | Helper functions</title>
+<link rel="canonical" href="https://keywordsalad.github.io/hakyllbars/helper-functions/">
+<link rel="stylesheet" href="/hakyllbars/css/main.css">
+<link rel="stylesheet" href="/hakyllbars/css/code-style.css">
+<script src="/hakyllbars/js/main.js" async></script>
+
+</head>
+<body>
+
+<header>
+  <h1>Hakyllbars: Advanced templates for Hakyll</h1>
+</header>
+
+<main>
+<h1>Helper functions</h1>
+<p>Variables that are functions may be applied to one or more arguments. As in Haskell, arguments are separated by whitespace.</p>
+<p>Functions may be applied and then <em>piped forward</em> as arguments to other expressions by using the <code>|</code> operator.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;{{getAbsUrl &#39;sitemap.xml&#39; | htmlEscape}}&quot;</span><span class="kw">&gt;</span>Sitemap<span class="kw">&lt;/a&gt;</span></span></code></pre></div>
+<p>This is equivalent to writing:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;{{htmlEscape (getAbsUrl &#39;sitemap.xml&#39;)}}&quot;</span><span class="kw">&gt;</span>Sitemap<span class="kw">&lt;/a&gt;</span></span></code></pre></div>
+<p>Helper functions are also used to define syntax, as in <a href="#conditions">conditionals</a> and <a href="#loops">loops</a>.</p>
+<h2 id="provided-helper-functions">Provided helper functions</h2>
+<ul>
+<li><a href="#dateas"><code>dateAs</code></a></li>
+<li><a href="#escapehtml"><code>escapeHtml</code></a></li>
+<li><a href="#getabsurl"><code>getAbsUrl</code></a></li>
+<li><a href="#geturl"><code>getUrl</code></a></li>
+<li><a href="#linkedtitle"><code>linkedTitle</code></a></li>
+<li><a href="#put"><code>put</code></a></li>
+<li><a href="#get"><code>get</code></a></li>
+<li><a href="#putblock"><code>pubBlock</code></a></li>
+<li><a href="#addblock"><code>addBlock</code></a></li>
+</ul>
+<h3 id="dateas"><code>dateAs</code></h3>
+<p>Use this helper function with the following date format variables in this syntax:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dateVariable <span class="op">|</span> dateAs formatVariable</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+<th style="text-align: left;">Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>longDate</code></td>
+<td style="text-align: left;"><code>"%B %e, %Y %l:%M %P %EZ"</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>shortDate</code></td>
+<td style="text-align: left;"><code>"%B %e, %Y"</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>timeOnly</code></td>
+<td style="text-align: left;"><code>"%l:%M %p %EZ"</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>robotDate</code></td>
+<td style="text-align: left;"><code>"%Y-%m-%d"</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>robotTime</code></td>
+<td style="text-align: left;"><code>"%Y-%m-%dT%H:%M:%S%Ez"</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="live-examples">Live examples</h4>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Expression</th>
+<th style="text-align: left;">Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>{{created | dateAs longDate}}</code></td>
+<td style="text-align: left;"><code>January 28, 2023  9:53 am -08:00</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>{{created | dateAs shortDate}}</code></td>
+<td style="text-align: left;"><code>January 28, 2023</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>{{created | dateAs timeOnly}}</code></td>
+<td style="text-align: left;"><code>9:53 AM -08:00</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>{{created | dateAs robotDate}}</code></td>
+<td style="text-align: left;"><code>2023-01-28</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>{{created | dateAs robotTime}}</code></td>
+<td style="text-align: left;"><code>2023-01-28T09:53:41-08:00</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="escapehtml"><code>escapeHtml</code></h3>
+<p>Stringifies and escapes its argument for interpolation into HTML. Use with the following syntax:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">alt</span><span class="ot">=</span><span class="st">&quot;{{imgAlt | escapeHtml}}&quot;</span> <span class="er">title</span><span class="ot">=</span><span class="st">&quot;{{imgTitle | escapeHtml}}&quot;</span> <span class="er">src</span><span class="ot">=</span><span class="st">&quot;...&quot;</span><span class="kw">&gt;</span></span></code></pre></div>
+<h4 id="live-examples-1">Live examples</h4>
+<table>
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Expression</th>
+<th style="text-align: left;">Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>{{'&lt;em&gt;Hello, World!&lt;/em&gt;' | escapeHtml}}</code></td>
+<td style="text-align: left;"><code>&amp;lt;em&amp;gt;Hello, World!&amp;lt;/em&amp;gt;</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="getabsurl"><code>getAbsUrl</code></h3>
+<p>Gets the absolute URL to a given item file path relative to the <code>host</code> and <code>siteRoot</code> variables using the form <code>{{host}}/{{siteRoot}}/{{getUrl itemPath}}</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- given:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">host: &quot;https://website.com&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">siteRoot: blog</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">--&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;{{getAbsUrl &#39;recipes.md&#39;}}&quot;</span><span class="kw">&gt;</span>Recipes<span class="kw">&lt;/a&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- interpolates as... --&gt;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;https://website.com/blog/recipes.html&quot;</span><span class="kw">&gt;</span>Recipes<span class="kw">&lt;/a&gt;</span></span></code></pre></div>
+<h4 id="live-examples-2">Live examples</h4>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Expression</th>
+<th style="text-align: left;">Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>{{getAbsUrl id}}</code></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="geturl"><code>getUrl</code></h3>
+<p>Gets the URL to a given item file path relative to the <code>siteRoot</code> variable using the form <code>{{siteRoot}}/{{getUrl itemPath}}</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- given:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">siteRoot: blog</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">--&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;{{getAbsUrl &#39;recipes.html&#39;}}&quot;</span><span class="kw">&gt;</span>Recipes<span class="kw">&lt;/a&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- interpolates as... --&gt;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;/blog/recipes.html&quot;</span><span class="kw">&gt;</span>Recipes<span class="kw">&lt;/a&gt;</span></span></code></pre></div>
+<h3 id="linkedtitle"><code>linkedTitle</code></h3>
+<p>Creates a link to a given item file path with its title as the value.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- given:</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">title: How to link a blog post</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">date: 2023-01-23</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">--&gt;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>{{linkedTitle &#39;blog/how-to-link.md&#39;}}</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- interpolates as... --&gt;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;/blog/2023/01/23/how-to-link/index.html&quot;</span><span class="kw">&gt;</span>How to link a blog post<span class="kw">&lt;/a&gt;</span></span></code></pre></div>
+<h3 id="put"><code>put</code></h3>
+<p>Puts a variable into the current context. The variable will be propagated to any following included templates.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>{{put &quot;fruit&quot; &quot;banana&quot;}}</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Fruit is: _{{fruit}}_</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- interpolates as... --&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p&gt;</span>Fruit is: <span class="kw">&lt;em&gt;</span>banana<span class="kw">&lt;/em&gt;&lt;/p&gt;</span></span></code></pre></div>
+<h3 id="get"><code>get</code></h3>
+<p>Gets a variable by name.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- given:</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">fruit: banana</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">variable: fruit</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">--&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>Variable _{{variable}}_ is _{{get &quot;variable&quot;}}_.</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- interpolates as... --&gt;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p&gt;</span>Variable <span class="kw">&lt;em&gt;</span>fruit<span class="kw">&lt;/em&gt;</span> is <span class="kw">&lt;em&gt;</span>banana<span class="kw">&lt;/em&gt;</span>.<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
+<h3 id="putblock"><code>putBlock</code></h3>
+<p>Puts an inline template into a variable. Note that this helper function requires the <code>#</code> prefix.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- given:</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">fruit: banana</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">--&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>{{#putBlock &quot;inlinePartial&quot;}}</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  This content will be captured here, with a fruit: _{{fruit}}_.</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>{{#end}}</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>{{inlinePartial}}</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- interpolates as... --&gt;</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p&gt;</span>This content will be captured here, with a fruit: <span class="kw">&lt;em&gt;</span>banana<span class="kw">&lt;/em&gt;</span>.</span></code></pre></div>
+<h3 id="addblock"><code>addBlock</code></h3>
+<p>Creates a list of inline templates or adds a template to an existing list. Note that this helper function requires the <code>#</code> prefix.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- given:</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">firstFruits: apples</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">secondFruits: oranges</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">--&gt;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>{{#addBlock &quot;fruits&quot;}}</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  This is the first fruit: _{{firstFruit}}_.</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>{{#end}}</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>{{#addBlock &quot;fruits&quot;}}</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  This is the second fruit: _{{secondFruit}}_.</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>{{#end}}</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>{{fruits}}</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- interpolates as... --&gt;</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p&gt;</span>This is the first fruit: <span class="kw">&lt;em&gt;</span>apples<span class="kw">&lt;/em&gt;</span>.<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p&gt;</span>This is the second fruit: <span class="kw">&lt;em&gt;</span>oranges<span class="kw">&lt;/em&gt;</span>.<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
+</main>
+
+<footer>
+  <p class="copyright">Copyright &copy; <span class="copyright-date">2021</span> Logan McGrath. All rights reserved.</p>
+  <p class="hakyll">Site proudly generated by <a href="http://jaspervdj.be/hakyll">Hakyll</a>.</p>
+  <p class="git">This page was rendered from <a href="https://github.com/keywordsalad/hakyllbars/tree/19d3cc9/site/helper-functions.md">helper-functions.md</a> at commit <a class="commit-link" href="https://github.com/keywordsalad/hakyllbars/tree/19d3cc9">19d3cc9</a>.</p>
+</footer>
+
+</body>
