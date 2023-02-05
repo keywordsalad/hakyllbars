@@ -26,23 +26,37 @@ Use this helper function with the following date format variables in this syntax
 dateVariable | dateAs formatVariable
 ```
 
-| Variable    | Default value              |
-|:------------|:---------------------------|
-| `longDate`  | `"%B %e, %Y %l:%M %P %EZ"` |
-| `shortDate` | `"%B %e, %Y"`              |
-| `timeOnly`  | `"%l:%M %p %EZ"`           |
-| `robotDate` | `"%Y-%m-%d"`               |
-| `robotTime` | `"%Y-%m-%dT%H:%M:%S%Ez"`   |
+`longDate`
+: `"%B %e, %Y %l:%M %P %EZ"`
+
+`shortDate`
+: `"%B %e, %Y"`
+
+`timeOnly`
+: `"%l:%M %p %EZ"`
+
+`robotDate`
+: `"%Y-%m-%d"`
+
+`robotTime`
+: `"%Y-%m-%dT%H:%M:%S%Ez"`
 
 #### Live examples
 
-| Expression                            | Result                           |
-|:--------------------------------------|:---------------------------------|
-| `{{*{{created | dateAs longDate}}}}`  | `{{created | dateAs longDate}}`  |
-| `{{*{{created | dateAs shortDate}}}}` | `{{created | dateAs shortDate}}` |
-| `{{*{{created | dateAs timeOnly}}}}`  | `{{created | dateAs timeOnly}}`  |
-| `{{*{{created | dateAs robotDate}}}}` | `{{created | dateAs robotDate}}` |
-| `{{*{{created | dateAs robotTime}}}}` | `{{created | dateAs robotTime}}` |
+`{{*{{created | dateAs longDate}}}}`
+: `{{created | dateAs longDate}}`
+
+`{{*{{created | dateAs shortDate}}}}`
+: `{{created | dateAs shortDate}}`
+
+`{{*{{created | dateAs timeOnly}}}}`
+: `{{created | dateAs timeOnly}}`
+
+`{{*{{created | dateAs robotDate}}}}`
+: `{{created | dateAs robotDate}}`
+
+`{{*{{created | dateAs robotTime}}}}`
+: `{{created | dateAs robotTime}}`
 
 ### `escapeHtml`
 
@@ -56,9 +70,8 @@ Stringifies and escapes its argument for interpolation into HTML. Use with the f
 
 #### Live examples
 
-| Expression                                       | Result                                      |
-|:-------------------------------------------------|:--------------------------------------------|
-| `{{*{{'<em>Hello, World!</em>' | escapeHtml}}}}` | `{{'<em>Hello, World!</em>' | escapeHtml}}` |
+`{{*{{'<em>Hello, World!</em>' | escapeHtml}}}}`
+: `{{'<em>Hello, World!</em>' | escapeHtml}}`
 
 ### `getAbsUrl`
 
@@ -79,9 +92,14 @@ siteRoot: blog
 
 #### Live examples
 
-| Expression              | Result |
-|:------------------------|:-------|
-| `{{*{{getAbsUrl id}}}}`
+`{{*{{getAbsUrl 'index.md'}}}}`
+: `{{getAbsUrl 'index.md'}}`
+
+`{{*{{getAbsUrl 'helper-functions.md'}}}}`
+: `{{getAbsUrl 'helper-functions.md'}}`
+
+`{{*{{getAbsUrl 'js/main.js'}}}}`
+: `{{getAbsUrl 'js/main.js'}}`
 
 ### `getUrl`
 
@@ -99,9 +117,20 @@ siteRoot: blog
 -}}
 ```
 
+#### Live examples
+
+`{{*{{getUrl 'index.md'}}}}`
+: `{{getUrl 'index.md'}}`
+
+`{{*{{getUrl 'helper-functions.md'}}}}`
+: `{{getUrl 'helper-functions.md'}}`
+
+`{{*{{getUrl 'js/main.js'}}}}`
+: `{{getUrl 'js/main.js'}}`
+
 ### `linkedTitle`
 
-Creates a link to a given item file path with its title as the value.
+Creates a link to a given item file path with its title as the value, using the associated hakyll route.
 
 ```html
 {{-*
@@ -116,13 +145,23 @@ date: 2023-01-23
 -}}
 ```
 
+#### Live examples
+
+`{{*{{linkedTitle 'index.md'}}}}`
+: {{linkedTitle 'index.md'}}
+: `{{linkedTitle 'index.md'}}`
+
+`{{*{{linkedTitle 'helper-functions.md'}}}}`
+: {{linkedTitle 'helper-functions.md'}}
+: `{{linkedTitle 'helper-functions.md'}}`
+
 ### `put`
 
-Puts a variable into the current context. The variable will be propagated to any following included templates.
+Puts one or more variables into the current context. The variables will be propagated to any following included templates.
 
 ```html
 {{-*
-{{put "fruit" "banana"}}
+{{put fruit: "banana"}}
 Fruit is: _{{fruit}}_
 
 <!-- interpolates as... -->
@@ -130,20 +169,12 @@ Fruit is: _{{fruit}}_
 }}
 ```
 
-### `get`
+#### Live examples
 
-Gets a variable by name.
-
-```html
-{{-*
-<!-- given:
-fruit: banana
-variable: fruit
--->
-Variable _{{variable}}_ is _{{get "variable"}}_.
-
-<!-- interpolates as... -->
-<p>Variable <em>fruit</em> is <em>banana</em>.</p>
+```markdown
+{{*
+{{put fruit: "banana", vegetable: "tomato" }}
+Fruit is _{{fruit}}_, vegetable is _{{vegetable}}_.
 }}
 ```
 
