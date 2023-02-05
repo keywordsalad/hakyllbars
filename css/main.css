@@ -33,3 +33,11 @@ header h1 {
 header h1 a {
   text-decoration: none;
 }
+
+dt {
+  font-weight: bold;
+}
+
+h4 {
+  font-style: italic;
+}
