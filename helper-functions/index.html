@@ -29,19 +29,41 @@
 <p>This is equivalent to writing:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;{{htmlEscape (getAbsUrl &#39;sitemap.xml&#39;)}}&quot;</span><span class="kw">&gt;</span>Sitemap<span class="kw">&lt;/a&gt;</span></span></code></pre></div>
 <p>Helper functions are also used to define syntax, as in <a href="#conditions">conditionals</a> and <a href="#loops">loops</a>.</p>
-<h2 id="provided-helper-functions">Provided helper functions</h2>
 <ul>
-<li><a href="#dateas"><code>dateAs</code></a></li>
-<li><a href="#escapehtml"><code>escapeHtml</code></a></li>
-<li><a href="#getabsurl"><code>getAbsUrl</code></a></li>
-<li><a href="#geturl"><code>getUrl</code></a></li>
-<li><a href="#linkedtitle"><code>linkedTitle</code></a></li>
-<li><a href="#put"><code>put</code></a></li>
-<li><a href="#get"><code>get</code></a></li>
-<li><a href="#putblock"><code>pubBlock</code></a></li>
-<li><a href="#addblock"><code>addBlock</code></a></li>
+<li><a href="#dateas"><code>dateAs</code></a>
+<ul>
+<li><a href="#live-examples">Live examples</a></li>
+</ul></li>
+<li><a href="#escapehtml"><code>escapeHtml</code></a>
+<ul>
+<li><a href="#live-examples-1">Live examples</a></li>
+</ul></li>
+<li><a href="#getabsurl"><code>getAbsUrl</code></a>
+<ul>
+<li><a href="#live-examples-2">Live examples</a></li>
+</ul></li>
+<li><a href="#geturl"><code>getUrl</code></a>
+<ul>
+<li><a href="#live-examples-3">Live examples</a></li>
+</ul></li>
+<li><a href="#linkedtitle"><code>linkedTitle</code></a>
+<ul>
+<li><a href="#live-examples-4">Live examples</a></li>
+</ul></li>
+<li><a href="#put"><code>put</code></a>
+<ul>
+<li><a href="#live-examples-5">Live examples</a></li>
+</ul></li>
+<li><a href="#putblock"><code>putBlock</code></a>
+<ul>
+<li><a href="#live-examples-6">Live examples</a></li>
+</ul></li>
+<li><a href="#addblock"><code>addBlock</code></a>
+<ul>
+<li><a href="#live-examples-7">Live examples</a></li>
+</ul></li>
 </ul>
-<h3 id="dateas"><code>dateAs</code></h3>
+<h2 id="dateas"><code>dateAs</code></h2>
 <p>Use this helper function with the following date format variables in this syntax:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dateVariable <span class="op">|</span> dateAs formatVariable</span></code></pre></div>
 <dl>
@@ -66,7 +88,7 @@
 <code>"%Y-%m-%dT%H:%M:%S%Ez"</code>
 </dd>
 </dl>
-<h4 id="live-examples">Live examples</h4>
+<h3 id="live-examples">Live examples</h3>
 <dl>
 <dt><code>{{created | dateAs longDate}}</code></dt>
 <dd>
@@ -89,17 +111,17 @@
 <code>2023-01-28T09:53:41-08:00</code>
 </dd>
 </dl>
-<h3 id="escapehtml"><code>escapeHtml</code></h3>
+<h2 id="escapehtml"><code>escapeHtml</code></h2>
 <p>Stringifies and escapes its argument for interpolation into HTML. Use with the following syntax:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">alt</span><span class="ot">=</span><span class="st">&quot;{{imgAlt | escapeHtml}}&quot;</span> <span class="er">title</span><span class="ot">=</span><span class="st">&quot;{{imgTitle | escapeHtml}}&quot;</span> <span class="er">src</span><span class="ot">=</span><span class="st">&quot;...&quot;</span><span class="kw">&gt;</span></span></code></pre></div>
-<h4 id="live-examples-1">Live examples</h4>
+<h3 id="live-examples-1">Live examples</h3>
 <dl>
 <dt><code>{{'&lt;em&gt;Hello, World!&lt;/em&gt;' | escapeHtml}}</code></dt>
 <dd>
 <code>&amp;lt;em&amp;gt;Hello, World!&amp;lt;/em&amp;gt;</code>
 </dd>
 </dl>
-<h3 id="getabsurl"><code>getAbsUrl</code></h3>
+<h2 id="getabsurl"><code>getAbsUrl</code></h2>
 <p>Gets the absolute URL to a given item file path relative to the <code>host</code> and <code>siteRoot</code> variables using the form <code>{{host}}/{{siteRoot}}/{{getUrl itemPath}}</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- given:</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">host: &quot;https://website.com&quot;</span></span>
@@ -109,7 +131,7 @@
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- interpolates as... --&gt;</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;https://website.com/blog/recipes.html&quot;</span><span class="kw">&gt;</span>Recipes<span class="kw">&lt;/a&gt;</span></span></code></pre></div>
-<h4 id="live-examples-2">Live examples</h4>
+<h3 id="live-examples-2">Live examples</h3>
 <dl>
 <dt><code>{{getAbsUrl 'index.md'}}</code></dt>
 <dd>
@@ -124,7 +146,7 @@
 <code>https://keywordsalad.github.io/hakyllbars/js/main.js</code>
 </dd>
 </dl>
-<h3 id="geturl"><code>getUrl</code></h3>
+<h2 id="geturl"><code>getUrl</code></h2>
 <p>Gets the URL to a given item file path relative to the <code>siteRoot</code> variable using the form <code>{{siteRoot}}/{{getUrl itemPath}}</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- given:</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">siteRoot: blog</span></span>
@@ -133,7 +155,7 @@
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- interpolates as... --&gt;</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;/blog/recipes.html&quot;</span><span class="kw">&gt;</span>Recipes<span class="kw">&lt;/a&gt;</span></span></code></pre></div>
-<h4 id="live-examples-3">Live examples</h4>
+<h3 id="live-examples-3">Live examples</h3>
 <dl>
 <dt><code>{{getUrl 'index.md'}}</code></dt>
 <dd>
@@ -148,7 +170,7 @@
 <code>/hakyllbars/js/main.js</code>
 </dd>
 </dl>
-<h3 id="linkedtitle"><code>linkedTitle</code></h3>
+<h2 id="linkedtitle"><code>linkedTitle</code></h2>
 <p>Creates a link to a given item file path with its title as the value, using the associated hakyll route.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- given:</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">title: How to link a blog post</span></span>
@@ -158,7 +180,7 @@
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- interpolates as... --&gt;</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;/blog/2023/01/23/how-to-link/index.html&quot;</span><span class="kw">&gt;</span>How to link a blog post<span class="kw">&lt;/a&gt;</span></span></code></pre></div>
-<h4 id="live-examples-4">Live examples</h4>
+<h3 id="live-examples-4">Live examples</h3>
 <dl>
 <dt><code>{{linkedTitle 'index.md'}}</code></dt>
 <dd>
@@ -175,18 +197,19 @@
 <code>&lt;a href="https://keywordsalad.github.io/hakyllbars/helper-functions/" title="Helper functions"&gt;Helper functions&lt;/a&gt;</code>
 </dd>
 </dl>
-<h3 id="put"><code>put</code></h3>
+<h2 id="put"><code>put</code></h2>
 <p>Puts one or more variables into the current context. The variables will be propagated to any following included templates.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>{{put fruit: &quot;banana&quot;}}</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Fruit is: _{{fruit}}_</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- interpolates as... --&gt;</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p&gt;</span>Fruit is: <span class="kw">&lt;em&gt;</span>banana<span class="kw">&lt;/em&gt;&lt;/p&gt;</span></span></code></pre></div>
-<h4 id="live-examples-5">Live examples</h4>
+<h3 id="live-examples-5">Live examples</h3>
 <div class="sourceCode" id="cb9"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>{{put fruit: &quot;banana&quot;, vegetable: &quot;tomato&quot; }}</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>Fruit is _{{fruit}}_, vegetable is _{{vegetable}}_.</span></code></pre></div>
-<h3 id="putblock"><code>putBlock</code></h3>
+<p>Fruit is <em>banana</em>, vegetable is <em>tomato</em>.</p>
+<h2 id="putblock"><code>putBlock</code></h2>
 <p>Puts an inline template into a variable. Note that this helper function requires the <code>#</code> prefix.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- given:</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">fruit: banana</span></span>
@@ -198,7 +221,9 @@
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- interpolates as... --&gt;</span></span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p&gt;</span>This content will be captured here, with a fruit: <span class="kw">&lt;em&gt;</span>banana<span class="kw">&lt;/em&gt;</span>.</span></code></pre></div>
-<h3 id="addblock"><code>addBlock</code></h3>
+<h3 id="live-examples-6">Live examples</h3>
+<p>This content will be captured here, with a fruit: <em>banana</em>.</p>
+<h2 id="addblock"><code>addBlock</code></h2>
 <p>Creates a list of inline templates or adds a template to an existing list. Note that this helper function requires the <code>#</code> prefix.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- given:</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">firstFruits: apples</span></span>
@@ -215,12 +240,15 @@
 <span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- interpolates as... --&gt;</span></span>
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p&gt;</span>This is the first fruit: <span class="kw">&lt;em&gt;</span>apples<span class="kw">&lt;/em&gt;</span>.<span class="kw">&lt;/p&gt;</span></span>
 <span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p&gt;</span>This is the second fruit: <span class="kw">&lt;em&gt;</span>oranges<span class="kw">&lt;/em&gt;</span>.<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
+<h3 id="live-examples-7">Live examples</h3>
+<p>This is the first fruit: <em>apples</em>.</p>
+<p>This is the second fruit: <em>oranges</em>.</p>
 </main>
 
 <footer>
   <p class="copyright">Copyright &copy; <span class="copyright-date">2021</span> Logan McGrath. All rights reserved.</p>
   <p class="hakyll">Site proudly generated by <a href="http://jaspervdj.be/hakyll">hakyll</a>.</p>
-  <p class="git">This page was rendered from <a href="https://github.com/keywordsalad/hakyllbars/tree/6c5d03e/site/helper-functions.md">helper-functions.md</a> at commit <a class="commit-link" href="https://github.com/keywordsalad/hakyllbars/tree/6c5d03e">6c5d03e</a>.</p>
+  <p class="git">This page was rendered from <a href="https://github.com/keywordsalad/hakyllbars/tree/cb9bf59/site/helper-functions.md">helper-functions.md</a> at commit <a class="commit-link" href="https://github.com/keywordsalad/hakyllbars/tree/cb9bf59">cb9bf59</a>.</p>
 </footer>
 
 </body>
