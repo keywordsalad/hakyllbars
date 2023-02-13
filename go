@@ -25,10 +25,9 @@ _verify-prerequisites () {
 }
 
 ⚡build () {
-  _help-line "Compile the site generator and generate the site"
+  _help-line "Compile hakyllbars and generate the site"
   stack build
   stack exec site build -- "$@"
-  ⚡favicons
 }
 
 ⚡clean () {
