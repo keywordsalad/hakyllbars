@@ -13,46 +13,97 @@ _verify-prerequisites () {
       _bad-message "Install haskell-stack to continue"
       exit 1
   fi
+
+  if ! command -v hakyll-init &> /dev/null
+  then
+    stack install hakyll
+    if [ $? -ne 0 ]; then
+      _bad-message "Failed to install Hakyll, check README.md for troubleshooting"
+      exit 1
+    fi
+  fi
 }
 
 ⚡build () {
-  _help-line "Compile Hakyllbars and generate the site"
+  _help-line "Compile the site generator and generate the site"
   stack build
-}
-
-⚡build_site () {
-  _help-line "Generate the site"
-  ⚡build
-  stack exec site build
+  stack exec site build -- "$@"
+  ⚡favicons
 }
 
 ⚡clean () {
-  _help-line "Clean everything"
-  ⚡clean_site
+  _help-line "Clean generated site files"
+  rm -rf _cache/* _site/*
+}
+
+⚡clean_all () {
+  _help-line "Clean generated site files and site generator binaries"
+  ⚡clean
   stack clean
 }
 
-⚡clean_site () {
-  _help-line "Clean the generated site"
-  rm -rf _cache
-}
-
 ⚡rebuild () {
-  _help-line "Clean and rebuild everything"
+  _help-line "Clean and then rebuild the generated site"
   ⚡clean
   ⚡build "$@"
 }
 
-⚡rebuild_site () {
-  _help-line "Clean and regenerate the site"
-  ⚡clean_site
-  ⚡build_site
+⚡rebuild_all () {
+  _help-line "Clean and then rebuild both the generated site and the site generator binary"
+  ⚡clean_all
+  ⚡build "$@"
 }
 
-⚡watch_site () {
-  _help-line "Preview the site"
-  ⚡rebuild_site
-  stack exec site watch
+⚡prebake() {
+  _help-line "Compile only the site generator's and tests' dependencies"
+  stack build --only-dependencies
+  stack test --only-dependencies
+}
+
+⚡watch () {
+  _help-line "Build the site generator, generate the site, and then run the preview server"
+  ⚡build
+  stack exec site watch -- "$@"
+}
+
+⚡rewatch() {
+  _help-line "Rebuild the site generator, regenerate the site, and then run the preview server"
+  ⚡rebuild
+  stack exec site watch -- "$@"
+}
+
+⚡kill() {
+  _help-line "Kill the site preview server if has gotten loose and run away!"
+  lsof -ti tcp:8000 | xargs kill -9
+}
+
+⚡publish () {
+  _help-line "Build the site and then publish it live"
+  current_branch="$(git branch --show-current)"
+  if [[ "$current_branch" != "main" ]]; then
+    _bad-message "Can only publish from main branch; tried to publish from $current_branch"
+    exit 1
+  fi
+  ⚡test_sync "main"
+
+  sha="$(git log -1 HEAD --pretty=format:%h)"
+
+  git fetch origin _site
+  mkdir -p _site
+  rm -rf _site/* _site/.git
+  cp -r .git/ ./_site/.git/
+  pushd ./_site
+  git switch _site
+  git pull origin _site
+  popd
+
+  DEPLOY_ENV=PROD ⚡rebuild
+
+  pushd ./_site
+  git add .
+  git commit -m "Build on $(date) generated from $sha"
+  git push origin _site
+  popd
 }
 
 ⚡test () {
