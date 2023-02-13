@@ -6,19 +6,24 @@ created: 2023-01-28T09:53:41-0800
 
 {{partial 'helper-functions'}}
 
-## Provided helper functions
+- [`dateAs`](#dateas)
+  - [Live examples](#live-examples)
+- [`escapeHtml`](#escapehtml)
+  - [Live examples](#live-examples-1)
+- [`getAbsUrl`](#getabsurl)
+  - [Live examples](#live-examples-2)
+- [`getUrl`](#geturl)
+  - [Live examples](#live-examples-3)
+- [`linkedTitle`](#linkedtitle)
+  - [Live examples](#live-examples-4)
+- [`put`](#put)
+  - [Live examples](#live-examples-5)
+- [`putBlock`](#putblock)
+  - [Live examples](#live-examples-6)
+- [`addBlock`](#addblock)
+  - [Live examples](#live-examples-7)
 
-* [`dateAs`](#dateas)
-* [`escapeHtml`](#escapehtml)
-* [`getAbsUrl`](#getabsurl)
-* [`getUrl`](#geturl)
-* [`linkedTitle`](#linkedtitle)
-* [`put`](#put)
-* [`get`](#get)
-* [`pubBlock`](#putblock)
-* [`addBlock`](#addblock)
-
-### `dateAs`
+## `dateAs`
 
 Use this helper function with the following date format variables in this syntax:
 
@@ -41,7 +46,7 @@ dateVariable | dateAs formatVariable
 `robotTime`
 : `"%Y-%m-%dT%H:%M:%S%Ez"`
 
-#### Live examples
+### Live examples
 
 `{{*{{created | dateAs longDate}}}}`
 : `{{created | dateAs longDate}}`
@@ -58,7 +63,7 @@ dateVariable | dateAs formatVariable
 `{{*{{created | dateAs robotTime}}}}`
 : `{{created | dateAs robotTime}}`
 
-### `escapeHtml`
+## `escapeHtml`
 
 Stringifies and escapes its argument for interpolation into HTML. Use with the following syntax:
 
@@ -68,12 +73,12 @@ Stringifies and escapes its argument for interpolation into HTML. Use with the f
 -}}
 ```
 
-#### Live examples
+### Live examples
 
 `{{*{{'<em>Hello, World!</em>' | escapeHtml}}}}`
 : `{{'<em>Hello, World!</em>' | escapeHtml}}`
 
-### `getAbsUrl`
+## `getAbsUrl`
 
 Gets the absolute URL to a given item file path relative to the `host` and `siteRoot` variables using the form `{{*{{host}}/{{siteRoot}}/{{getUrl itemPath}}}}`.
 
@@ -90,7 +95,7 @@ siteRoot: blog
 -}}
 ```
 
-#### Live examples
+### Live examples
 
 `{{*{{getAbsUrl 'index.md'}}}}`
 : `{{getAbsUrl 'index.md'}}`
@@ -101,7 +106,7 @@ siteRoot: blog
 `{{*{{getAbsUrl 'js/main.js'}}}}`
 : `{{getAbsUrl 'js/main.js'}}`
 
-### `getUrl`
+## `getUrl`
 
 Gets the URL to a given item file path relative to the `siteRoot` variable using the form `{{*{{siteRoot}}/{{getUrl itemPath}}}}`.
 
@@ -117,7 +122,7 @@ siteRoot: blog
 -}}
 ```
 
-#### Live examples
+### Live examples
 
 `{{*{{getUrl 'index.md'}}}}`
 : `{{getUrl 'index.md'}}`
@@ -128,7 +133,7 @@ siteRoot: blog
 `{{*{{getUrl 'js/main.js'}}}}`
 : `{{getUrl 'js/main.js'}}`
 
-### `linkedTitle`
+## `linkedTitle`
 
 Creates a link to a given item file path with its title as the value, using the associated hakyll route.
 
@@ -145,7 +150,7 @@ date: 2023-01-23
 -}}
 ```
 
-#### Live examples
+### Live examples
 
 `{{*{{linkedTitle 'index.md'}}}}`
 : {{linkedTitle 'index.md'}}
@@ -155,7 +160,7 @@ date: 2023-01-23
 : {{linkedTitle 'helper-functions.md'}}
 : `{{linkedTitle 'helper-functions.md'}}`
 
-### `put`
+## `put`
 
 Puts one or more variables into the current context. The variables will be propagated to any following included templates.
 
@@ -169,7 +174,7 @@ Fruit is: _{{fruit}}_
 }}
 ```
 
-#### Live examples
+### Live examples
 
 ```markdown
 {{*
@@ -178,15 +183,18 @@ Fruit is _{{fruit}}_, vegetable is _{{vegetable}}_.
 }}
 ```
 
-### `putBlock`
+{{put fruit: "banana", vegetable: "tomato" }}
+Fruit is _{{fruit}}_, vegetable is _{{vegetable}}_.
+
+## `putBlock`
 
 Puts an inline template into a variable. Note that this helper function requires the `#` prefix.
 
 ```html
-{{-*
 <!-- given:
 fruit: banana
 -->
+{{-*
 {{#putBlock "inlinePartial"}}
   This content will be captured here, with a fruit: _{{fruit}}_.
 {{#end}}
@@ -197,7 +205,15 @@ fruit: banana
 }}
 ```
 
-### `addBlock`
+### Live examples
+
+{{put fruit: 'banana'}}
+{{#putBlock "inlinePartial"}}
+  This content will be captured here, with a fruit: _{{fruit}}_.
+{{#end}}
+{{inlinePartial}}
+
+## `addBlock`
 
 Creates a list of inline templates or adds a template to an existing list. Note that this helper function requires the `#` prefix.
 
@@ -220,3 +236,14 @@ secondFruits: oranges
 <p>This is the second fruit: <em>oranges</em>.</p>
 -}}
 ```
+
+### Live examples
+
+{{put firstFruit: 'apples', secondFruit: 'oranges'}}
+{{#addBlock "fruits"}}
+  This is the first fruit: _{{firstFruit}}_.
+{{#end}}
+{{#addBlock "fruits"}}
+  This is the second fruit: _{{secondFruit}}_.
+{{#end}}
+{{fruits}}

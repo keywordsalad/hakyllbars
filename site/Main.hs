@@ -11,7 +11,7 @@ import Text.Pandoc.Highlighting (haddock, styleToCss)
 
 main :: IO ()
 main = do
-  deployEnv <- fromMaybe Prod . ((=<<) deployEnvFromStr) <$> lookupEnv "DEPLOY"
+  deployEnv <- fromMaybe Prod . ((=<<) deployEnvFromStr) <$> lookupEnv "DEPLOY_ENV"
   time <- utcToZonedTime <$> getCurrentTimeZone <*> getCurrentTime
   let dateConfig = defaultDateConfigWith defaultTimeLocale time
   hakyllWith config do
@@ -106,8 +106,8 @@ data DeployEnv = Prod | Dev
 
 deployEnvFromStr :: String -> Maybe DeployEnv
 deployEnvFromStr = \case
-  "PROD" -> Just Prod
-  "DEV" -> Just Dev
+  "prod" -> Just Prod
+  "dev" -> Just Dev
   _ -> Nothing
 
 deployEnvHost :: DeployEnv -> String

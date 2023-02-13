@@ -87,22 +87,40 @@ _verify-prerequisites () {
 
   sha="$(git log -1 HEAD --pretty=format:%h)"
 
-  git fetch origin _site
+  git fetch origin gh-pages
   mkdir -p _site
   rm -rf _site/* _site/.git
   cp -r .git/ ./_site/.git/
   pushd ./_site
-  git switch _site
-  git pull origin _site
+  git switch gh-pages
+  git pull origin gh-pages
   popd
 
-  DEPLOY_ENV=PROD ⚡rebuild
+  DEPLOY_ENV=prod ⚡rebuild
 
   pushd ./_site
   git add .
   git commit -m "Build on $(date) generated from $sha"
-  git push origin _site
+  git push origin gh-pages
   popd
+}
+
+⚡test_sync () {
+  _help-line "Verify that the current or specified local branch is up to date with the remote branch"
+
+  branch=${1:-$(git branch --show-current)}
+  git switch $branch
+  git fetch origin $branch
+
+  rev_parse_remote="$(git rev-parse origin/$branch)"
+  rev_parse_local="$(git rev-parse $branch)"
+
+  if [ "$rev_parse_local" != "$rev_parse_remote" ]; then
+    _bad-message "Branch $branch not in sync with remote!"
+    exit 1
+  fi
+
+  _good-message "Local branch $branch is up to date with remote"
 }
 
 ⚡test () {
