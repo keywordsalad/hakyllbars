@@ -9,24 +9,12 @@ I created my own template language that allows me to specify complex includes, l
 
 _See hakyll's own template docs [here](https://jaspervdj.be/hakyll/tutorials/04-compilers.html)._
 
-## Things I want in a templating language
+**Hakyllbars supports the following:**
 
 * [Variables](#variables)
-* [Helper functions](#helper-functions)
+* [Helper functions]({{getUrl 'helper-functions.md'}})
 * [Layouts](#layouts)
-* [Conditions](#conditions)
+* [Control flow]({{getUrl 'control-flow.md'}})
 * [Loops](#loops)
-
-{{section 'variables'}}
-
-### Helper functions
-
-{{partial 'helper-functions'}}
-
-**[hakyllbars defines a number of helper functions by default!]({{getUrl 'helper-functions.md'}})**
-
-{{section 'layouts'}}
-{{section 'conditions'}}
-{{section 'loops'}}
 
 [hakyll]: https://jaspervdj.be/hakyll/

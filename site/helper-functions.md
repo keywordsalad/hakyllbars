@@ -4,7 +4,25 @@ layout: default
 created: 2023-01-28T09:53:41-0800
 ---
 
-{{partial 'helper-functions'}}
+Variables that are functions may be applied to one or more arguments. As in Haskell, arguments are separated by whitespace.
+
+Functions may be applied and then _piped forward_ as arguments to other expressions by using the `|` operator.
+
+```html
+{{-*
+<a href="{{getAbsUrl 'sitemap.xml' | htmlEscape}}">Sitemap</a>
+-}}
+```
+
+This is equivalent to writing:
+
+```html
+{{-*
+<a href="{{htmlEscape (getAbsUrl 'sitemap.xml')}}">Sitemap</a>
+-}}
+```
+
+Helper functions are also used to define syntax, as in [conditionals](#conditions) and [loops](#loops).
 
 - [`dateAs`](#dateas)
   - [Live examples](#live-examples)
@@ -80,7 +98,7 @@ Stringifies and escapes its argument for interpolation into HTML. Use with the f
 
 ## `getAbsUrl`
 
-Gets the absolute URL to a given item file path relative to the `host` and `siteRoot` variables using the form `{{*{{host}}/{{siteRoot}}/{{getUrl itemPath}}}}`.
+Gets the absolute URL to a given item file path relative to the `host` and `siteRoot` variables using the form `{{*{{host}}/{{siteRoot}}/{{getUrl itemPath}}}}`. This helper also strips the trailing `index.html` from the URL.
 
 ```html
 {{-*
@@ -108,14 +126,14 @@ siteRoot: blog
 
 ## `getUrl`
 
-Gets the URL to a given item file path relative to the `siteRoot` variable using the form `{{*{{siteRoot}}/{{getUrl itemPath}}}}`.
+Gets the URL to a given item file path relative to the `siteRoot` variable using the form `{{*{{siteRoot}}/{{getUrl itemPath}}}}`. This helper also strips the trailing `index.html` from the URL.
 
 ```html
 {{-*
 <!-- given:
 siteRoot: blog
 -->
-<a href="{{getAbsUrl 'recipes.html'}}">Recipes</a>
+<a href="{{getUrl 'recipes.html'}}">Recipes</a>
 
 <!-- interpolates as... -->
 <a href="/blog/recipes.html">Recipes</a>
@@ -171,16 +189,16 @@ Fruit is: _{{fruit}}_
 
 <!-- interpolates as... -->
 <p>Fruit is: <em>banana</em></p>
-}}
+-}}
 ```
 
 ### Live examples
 
 ```markdown
-{{*
+{{-*
 {{put fruit: "banana", vegetable: "tomato" }}
 Fruit is _{{fruit}}_, vegetable is _{{vegetable}}_.
-}}
+-}}
 ```
 
 {{put fruit: "banana", vegetable: "tomato" }}
