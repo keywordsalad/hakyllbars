@@ -26,113 +26,20 @@
 <p><a href="https://jaspervdj.be/hakyll/">hakyll</a>’s own templating language is very simple. It doesn’t permit functions or provide a means to extend its syntax. Simple templates are easy to define and include, but I want something more expressive.</p>
 <p>I created my own template language that allows me to specify complex includes, layouts, and define functions. The syntax is inspired by <a href="https://handlebarsjs.com">HandlebarsJS</a>, so I call it <em>hakyllbars</em>!</p>
 <p><em>See hakyll’s own template docs <a href="https://jaspervdj.be/hakyll/tutorials/04-compilers.html">here</a>.</em></p>
-<h2 id="things-i-want-in-a-templating-language">Things I want in a templating language</h2>
+<p><strong>Hakyllbars supports the following:</strong></p>
 <ul>
 <li><a href="#variables">Variables</a></li>
-<li><a href="#helper-functions">Helper functions</a></li>
+<li><a href="/hakyllbars/helper-functions/">Helper functions</a></li>
 <li><a href="#layouts">Layouts</a></li>
-<li><a href="#conditions">Conditions</a></li>
+<li><a href="/hakyllbars/control-flow/">Control flow</a></li>
 <li><a href="#loops">Loops</a></li>
 </ul>
-<h3 id="variables">Variables</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;h1&gt;</span>Hello, {{name}}!<span class="kw">&lt;/h1&gt;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p&gt;</span>This is how to interpolate a {{variable}}.<span class="kw">&lt;/p&gt;</span></span></code></pre></div>
-<p>Any variable that can be stringified may be interpolated!</p>
-<p>Variables may be declared in markdown frontmatter:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> This is my website</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">updated:</span><span class="co"> 2023-01-21</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu"># {{title}}</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>Last updated on {{updated}}.</span></code></pre></div>
-<h3 id="helper-functions">Helper functions</h3>
-<p>Variables that are functions may be applied to one or more arguments. As in Haskell, arguments are separated by whitespace.</p>
-<p>Functions may be applied and then <em>piped forward</em> as arguments to other expressions by using the <code>|</code> operator.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;{{getAbsUrl &#39;sitemap.xml&#39; | htmlEscape}}&quot;</span><span class="kw">&gt;</span>Sitemap<span class="kw">&lt;/a&gt;</span></span></code></pre></div>
-<p>This is equivalent to writing:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;{{htmlEscape (getAbsUrl &#39;sitemap.xml&#39;)}}&quot;</span><span class="kw">&gt;</span>Sitemap<span class="kw">&lt;/a&gt;</span></span></code></pre></div>
-<p>Helper functions are also used to define syntax, as in <a href="#conditions">conditionals</a> and <a href="#loops">loops</a>.</p>
-<p><strong><a href="/hakyllbars/helper-functions/">hakyllbars defines a number of helper functions by default!</a></strong></p>
-<h3 id="layouts">Layouts</h3>
-<p>The file <code>example.md</code> declares <code>page</code> as its layout using the <code>appleLayout</code> helper function:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> This is a page</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>{{@applyLayout &#39;page&#39;}}</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>This is a page with a layout.</span></code></pre></div>
-<p>The <code>page</code> layout is defined in <code>_layouts/page.html</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!doctype </span>html<span class="dt">&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;html&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;head&gt;</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;title&gt;</span>{{title}}<span class="kw">&lt;/title&gt;</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/head&gt;</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;body&gt;</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;h1&gt;</span>{{title}}<span class="kw">&lt;/h1&gt;</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  {{body}}</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/body&gt;</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/html&gt;</span></span></code></pre></div>
-<p>The content from <code>example.md</code> is interpolated into <code>_layouts/page.html</code> like this:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!doctype </span>html<span class="dt">&gt;</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;html&gt;</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;head&gt;</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;title&gt;</span>This is a page<span class="kw">&lt;/title&gt;</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/head&gt;</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;body&gt;</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;h1&gt;</span>This is a page<span class="kw">&lt;/h1&gt;</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;p&gt;</span>This is a page with a layout.<span class="kw">&lt;/p&gt;</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/body&gt;</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/html&gt;</span></span></code></pre></div>
-<h3 id="conditions">Conditions</h3>
-<p>Conditional expressions are supported by the <code>if</code> helper function. They permit a block of content if a given condition is <em>truthy</em>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>{{#if author}}</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  This page was written by {{author}}.</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>{{#end}}</span></code></pre></div>
-<p>Default content may be provided:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>{{#if published}}</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  This page was published on {{published}}.</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>{{#else}}</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  This page is a draft.</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>{{#end}}</span></code></pre></div>
-<p>Additionally, multiple conditions may be chained in sequence:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>{{#if updated}}</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  This page was updated on {{updated}}.</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>{{#else if published}}</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  This page was published on {{published}}.</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>{{#else}}</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  This page is a draft.</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>{{#end}}</span></code></pre></div>
-<h3 id="loops">Loops</h3>
-<p>Lists of items may be iterated over using the <code>for</code> helper function. Each item’s attributes become available in the scope of the associated block.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;h1&gt;</span>Posts<span class="kw">&lt;/h1&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;ul&gt;</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  {{#for posts}}</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;li&gt;</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;strong&gt;&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;{{url}}&quot;</span><span class="kw">&gt;</span>{{title}}<span class="kw">&lt;/a&gt;&lt;/strong&gt;</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>      {{#if published}}</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        Published on {{published}}.</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>      {{#else}}</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        This post is a draft.</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>      {{#end}}</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;li&gt;</span></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  {{#end}}</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/ul&gt;</span></span></code></pre></div>
-<p>If a list is empty, a default block may be provided:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;ul&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  {{#for posts}}</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    ...</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  {{#else}}</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;li&gt;</span>There are no posts here.<span class="kw">&lt;/li&gt;</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  {{#end}}</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/ul&gt;</span></span></code></pre></div>
 </main>
 
 <footer>
   <p class="copyright">Copyright &copy; <span class="copyright-date">2021</span> Logan McGrath. All rights reserved.</p>
   <p class="hakyll">Site proudly generated by <a href="http://jaspervdj.be/hakyll">hakyll</a>.</p>
-  <p class="git">This page was rendered from <a href="https://github.com/keywordsalad/hakyllbars/tree/49d1182/site/index.md">index.md</a> at commit <a class="commit-link" href="https://github.com/keywordsalad/hakyllbars/tree/49d1182">49d1182</a>.</p>
+  <p class="git">This page was rendered from <a href="https://github.com/keywordsalad/hakyllbars/tree/ff9e105/site/index.md">index.md</a> at commit <a class="commit-link" href="https://github.com/keywordsalad/hakyllbars/tree/ff9e105">ff9e105</a>.</p>
 </footer>
 
 </body>
