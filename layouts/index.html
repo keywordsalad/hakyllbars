@@ -23,13 +23,83 @@
 
 <main>
 <h1>Layouts</h1>
-<h3 id="section"></h3>
+<p>Hakyllbars supports several helpers to enable layouts within your pages.</p>
+<h2 id="applylayout"><code>@applyLayout</code></h2>
+<p>Layouts may be applied using the <code>@applyLayout</code> helper. The item to which the template is applied is make available to
+the template as the <code>item</code> variable.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- _layouts/main.html --&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;html&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;head&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;title&gt;</span>{{title}}<span class="kw">&lt;/title&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/head&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;body&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  {{item}}</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/body&gt;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/html&gt;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- page.md --&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>title: This is my page</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>___</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>{{@applyLayout &#39;main.html&#39;}}</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>Your content here.</span></code></pre></div>
+<h2 id="layouts-applied-by-metadata">Layouts applied by metadata</h2>
+<p>Layouts may also be driven by metadata by using the following trick:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- _layouts/main.html --&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;html&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;head&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;title&gt;</span>{{title}}<span class="kw">&lt;/title&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/head&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;body&gt;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  {{item}}</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/body&gt;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/html&gt;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- _layouts/from-context.html --&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>{{#if layout-}}{{@applyLayout layout-}}{{body-}}{{#else-}}{{body-}}{{#end-}}<span class="co">&lt;!-- page.md --&gt;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>title: This is my page</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>layout: main</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>___</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>Your content here.</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>*</span></code></pre></div>
+<p>And then when compiling your pages, use <code>HB.applyTemplate "_layouts/from-context.html"</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Main.hs</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>compile <span class="kw">do</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  getResourceBody <span class="op">&gt;&gt;=</span> HB.applyTemplates <span class="kw">do</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    HB.applyContext context</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    HB.applyContent</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    HB.applyTemplate <span class="st">&quot;_layouts/from-context.html&quot;</span></span></code></pre></div>
+<h2 id="compiling-layouts">Compiling layouts</h2>
+<p>Layouts should live in the <code>_layouts/</code> folder within your site source. Layouts must also be compiled before they may be
+used, and this is accomplished with the following code:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">templates ::</span> <span class="dt">Rules</span> <span class="dt">Dependency</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>templates <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  match <span class="st">&quot;_layouts/**&quot;</span> <span class="kw">do</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    compile <span class="op">$</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>      getResourceBody</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">&gt;&gt;=</span> HB.compileTemplateItem</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">&gt;&gt;=</span> makeItem</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  makePatternDependency templatePattern</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  templatesDependency <span class="ot">&lt;-</span> templates</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  rulesExtraDependencies [templatesDependency] <span class="kw">do</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    match <span class="st">&quot;*.md&quot;</span> <span class="kw">do</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>      route <span class="op">$</span> setExtension <span class="st">&quot;html&quot;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>      compile <span class="kw">do</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        getResourceBody <span class="op">&gt;&gt;=</span> HB.applyTemplates <span class="kw">do</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>          HB.applyContext context</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>          HB.applyContent</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>          HB.applyTemplate <span class="st">&quot;_layouts/from-context.html&quot;</span></span></code></pre></div>
 </main>
 
 <footer>
   <p class="copyright">Copyright &copy; <span class="copyright-date">2021</span> Logan McGrath. All rights reserved.</p>
   <p class="hakyll">Site proudly generated by <a href="http://jaspervdj.be/hakyll">hakyll</a>.</p>
-  <p class="git">This page was rendered from <a href="https://github.com/keywordsalad/hakyllbars/tree/a7bdc57/site/layouts.md">layouts.md</a> at commit <a class="commit-link" href="https://github.com/keywordsalad/hakyllbars/tree/a7bdc57">a7bdc57</a>.</p>
+  <p class="git">This page was rendered from <a href="https://github.com/keywordsalad/hakyllbars/tree/3d93f5d/site/layouts.md">layouts.md</a> at commit <a class="commit-link" href="https://github.com/keywordsalad/hakyllbars/tree/3d93f5d">3d93f5d</a>.</p>
 </footer>
 
 </body>
