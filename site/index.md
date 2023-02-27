@@ -18,6 +18,8 @@ _See hakyll's own template docs [here](https://jaspervdj.be/hakyll/tutorials/04-
 
 ## Getting started
 
+Here's some basic boilerplate to leverage Hakyllbars in your site:
+
 ```haskell
 import Hakyllbars as HB
 import Data.Time
@@ -39,9 +41,13 @@ main = do
 
   where
     context dateConfig =
-      HB.gitFields providerDirectory gitWebUrl -- Sets up the git fields
-        <> HB.dateFields dateConfig            -- Sets up the date fields
-        <> HB.defaultFields host siteRoot      -- Using the default fields is very recommended
+      -- Sets up the git fields
+      HB.gitFields providerDirectory gitWebUrl
+        -- Sets up the date fields
+        <> HB.dateFields dateConfig
+        -- Using the default fields is very recommended
+        <> HB.defaultFields host siteRoot
+
     providerDirectory = "site" -- where your Hakyll files live
     gitWebUrl = "https://github.com/keywordsalad/hakyllbars/tree"
     host = "https://keywordsalad.github.io"
