@@ -11,10 +11,41 @@ _See hakyll's own template docs [here](https://jaspervdj.be/hakyll/tutorials/04-
 
 **Hakyllbars supports the following:**
 
-* [Variables](#variables)
+* [Variables]({{getUrl 'variables.md'}})
 * [Helper functions]({{getUrl 'helper-functions.md'}})
-* [Layouts](#layouts)
+* [Layouts]({{getUrl 'layouts.md'}})
 * [Control flow]({{getUrl 'control-flow.md'}})
-* [Loops](#loops)
+
+## Getting started
+
+```haskell
+import Hakyllbars as HB
+import Data.Time
+
+main = do
+  -- Sets up configuration for the date fields
+  time <- utcToZonedTime <$> getCurrentTimeZone <*> getCurrentTime
+  let dateConfig = HB.defaultDateConfigWith defaultTimeLocale time
+
+  match "*.md" do
+    route $ setExtension "html"
+    -- This is where Hakyllbars is applied
+    compile do
+      getResourceBody >>= HB.applyTemplates do
+        -- Sets the root context used in the templates
+        HB.applyContext context
+        -- Applies the item content as a template
+        HB.applyContent
+
+  where
+    context dateConfig =
+      HB.gitFields providerDirectory gitWebUrl -- Sets up the git fields
+        <> HB.dateFields dateConfig            -- Sets up the date fields
+        <> HB.defaultFields host siteRoot      -- Using the default fields is very recommended
+    providerDirectory = "site" -- where your Hakyll files live
+    gitWebUrl = "https://github.com/keywordsalad/hakyllbars/tree"
+    host = "https://keywordsalad.github.io"
+    siteRoot = "/hakyllbars"
+```
 
 [hakyll]: https://jaspervdj.be/hakyll/

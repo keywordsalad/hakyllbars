@@ -13,7 +13,7 @@ main :: IO ()
 main = do
   deployEnv <- fromMaybe Prod . ((=<<) deployEnvFromStr) <$> lookupEnv "DEPLOY_ENV"
   time <- utcToZonedTime <$> getCurrentTimeZone <*> getCurrentTime
-  let dateConfig = defaultDateConfigWith defaultTimeLocale time
+  let dateConfig = HB.defaultDateConfigWith defaultTimeLocale time
   hakyllWith config do
     css' <- css
     js' <- js
