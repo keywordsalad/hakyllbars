@@ -70,76 +70,76 @@ spec = do
         "{{'this string}} has these {{'"
           `produces` [ExpressionBlockToken', StringToken' "this string}} has these {{"]
 
-      context "text" do
-        "\\{{*" `produces` [TextToken' "{{*"]
-        "\\{{!" `produces` [TextToken' "{{!"]
-        "\\}}" `produces` [TextToken' "}}"]
-        "\\{{" `produces` [TextToken' "{{"]
-        "{a" `produces` [TextToken' "{a"]
-        "}a" `produces` [TextToken' "}a"]
-        "\\a" `produces` [TextToken' "\\a"]
-        "\\\\" `produces` [TextToken' "\\"]
+    context "text" do
+      "\\{{*" `produces` [TextToken' "{{*"]
+      "\\{{!" `produces` [TextToken' "{{!"]
+      "\\}}" `produces` [TextToken' "}}"]
+      "\\{{" `produces` [TextToken' "{{"]
+      "{a" `produces` [TextToken' "{a"]
+      "}a" `produces` [TextToken' "}a"]
+      "\\a" `produces` [TextToken' "\\a"]
+      "\\\\" `produces` [TextToken' "\\"]
 
-        "this contains a \\}} literal"
-          `produces` [TextToken' "this contains a }} literal"]
+      "this contains a \\}} literal"
+        `produces` [TextToken' "this contains a }} literal"]
 
-      context "comment blocks" do
-        "{{! this is a comment }}"
-          `produces` [ CommentBlockToken',
-                       TextToken' " this is a comment ",
-                       CloseBlockToken'
-                     ]
+    context "comment blocks" do
+      "{{! this is a comment }}"
+        `produces` [ CommentBlockToken',
+                      TextToken' " this is a comment ",
+                      CloseBlockToken'
+                    ]
 
-        "{{! this {{is {{! a}} nested}} comment }}"
-          `produces` [ CommentBlockToken',
-                       TextToken' " this {{is {{! a}} nested}} comment ",
-                       CloseBlockToken'
-                     ]
-        "{{! this has an \\}} in it }}"
-          `produces` [ CommentBlockToken',
-                       TextToken' " this has an }} in it ",
-                       CloseBlockToken'
-                     ]
+      "{{! this {{is {{! a}} nested}} comment }}"
+        `produces` [ CommentBlockToken',
+                      TextToken' " this {{is {{! a}} nested}} comment ",
+                      CloseBlockToken'
+                    ]
+      "{{! this has an \\}} in it }}"
+        `produces` [ CommentBlockToken',
+                      TextToken' " this has an }} in it ",
+                      CloseBlockToken'
+                    ]
 
-      context "mixing blocks" do
-        "{{expression}} and some text"
+    context "mixing blocks" do
+      "{{expression}} and some text"
+        `produces` [ ExpressionBlockToken',
+                      NameToken' "expression",
+                      CloseBlockToken',
+                      TextToken' " and some text"
+                    ]
+      "this {{expression}} and some text"
+        `produces` [ TextToken' "this ",
+                      ExpressionBlockToken',
+                      NameToken' "expression",
+                      CloseBlockToken',
+                      TextToken' " and some text"
+                    ]
+      "here: {{! a comment {{with nesting}} }} followed by {{an | expression}}"
+        `produces` [ TextToken' "here: ",
+                      CommentBlockToken',
+                      TextToken' " a comment {{with nesting}} ",
+                      CloseBlockToken',
+                      TextToken' " followed by ",
+                      ExpressionBlockToken',
+                      NameToken' "an",
+                      PipeToken',
+                      NameToken' "expression",
+                      CloseBlockToken'
+                    ]
+
+    context "whitespace-trimmed blocks" do
+      context "end-trimming block" do
+        "{{expression-}}     some spaces"
           `produces` [ ExpressionBlockToken',
-                       NameToken' "expression",
-                       CloseBlockToken',
-                       TextToken' " and some text"
-                     ]
-        "this {{expression}} and some text"
-          `produces` [ TextToken' "this ",
-                       ExpressionBlockToken',
-                       NameToken' "expression",
-                       CloseBlockToken',
-                       TextToken' " and some text"
-                     ]
-        "here: {{! a comment {{with nesting}} }} followed by {{an | expression}}"
-          `produces` [ TextToken' "here: ",
-                       CommentBlockToken',
-                       TextToken' " a comment {{with nesting}} ",
-                       CloseBlockToken',
-                       TextToken' " followed by ",
-                       ExpressionBlockToken',
-                       NameToken' "an",
-                       PipeToken',
-                       NameToken' "expression",
-                       CloseBlockToken'
-                     ]
-
-      context "whitespace-trimmed blocks" do
-        context "end-trimming block" do
-          "{{expression-}}     some spaces"
-            `produces` [ ExpressionBlockToken',
-                         NameToken' "expression",
-                         CloseBlockToken',
-                         TextToken' "some spaces"
-                       ]
-        context "start-trimming block" do
-          "some spaces\n   {{-expression}}"
-            `produces` [ TextToken' "some spaces",
-                         ExpressionBlockToken',
-                         NameToken' "expression",
-                         CloseBlockToken'
-                       ]
+                        NameToken' "expression",
+                        CloseBlockToken',
+                        TextToken' "some spaces"
+                      ]
+      context "start-trimming block" do
+        "some spaces\n   {{-expression}}"
+          `produces` [ TextToken' "some spaces",
+                        ExpressionBlockToken',
+                        NameToken' "expression",
+                        CloseBlockToken'
+                      ]
