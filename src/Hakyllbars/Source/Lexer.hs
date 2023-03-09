@@ -29,7 +29,7 @@ token =
       trace "TextMode"
       tryOne
         [ do
-            void . lookAhead $ tryOne [trimmingOpen, open]
+            void . lookAhead $ tryOne [spaces *> trimmingOpen, open]
             startBlock
             token,
           textToken
@@ -94,7 +94,7 @@ fencedText = withPosition (TextToken <$> p "")
           startBlock
           return acc
         _ -> do
-          x <- tryOne [trimmingClose <* spaces, close]
+          x <- tryOne [trimmingClose, close]
           p (acc ++ x)
     -- ...abc...
     fenceText acc = do
@@ -369,10 +369,10 @@ close :: Lexer String
 close = tokenTagParser CloseBlockToken
 
 trimmingOpen :: Lexer String
-trimmingOpen = spaces *> trimmingTokenTagParser ExpressionBlockToken
+trimmingOpen = trimmingTokenTagParser ExpressionBlockToken
 
 trimmingClose :: Lexer String
-trimmingClose = trimmingTokenTagParser CloseBlockToken <* spaces
+trimmingClose = trimmingTokenTagParser CloseBlockToken
 
 openBrace :: Lexer String
 openBrace = tokenTagParser OpenBraceToken

@@ -130,7 +130,7 @@ spec = do
 
     context "whitespace-trimmed blocks" do
       context "end-trimming block" do
-        "{{expression-}}     some spaces"
+        "{{expression-}}\n     some spaces"
           `produces` [ ExpressionBlockToken',
                         NameToken' "expression",
                         CloseBlockToken',
@@ -143,3 +143,34 @@ spec = do
                         NameToken' "expression",
                         CloseBlockToken'
                       ]
+
+    context "turning off blocks" do
+      context "expression block" do
+        "{{*{{expression}}}}"
+          `produces` [ TurnOffToken',
+                        TextToken' "{{expression}}",
+                        CloseBlockToken'
+                     ]
+      context "trimming" do
+        intercalate "\n" [ "{{*",
+                            "{{#if layout-}}",
+                            "  {{@applyLayout layout-}}",
+                            "  {{body-}}",
+                            "{{#else-}}",
+                            "  {{body-}}",
+                            "{{#end-}}",
+                            "}}"
+                          ]
+          `produces` [ TurnOffToken',
+                        TextToken' (intercalate "\n" [
+                          "",
+                          "{{#if layout-}}",
+                          "  {{@applyLayout layout-}}",
+                          "  {{body-}}",
+                          "{{#else-}}",
+                          "  {{body-}}",
+                          "{{#end-}}",
+                          ""
+                        ]),
+                        CloseBlockToken'
+                    ]
