@@ -7,7 +7,8 @@ cabal-version: 1.12
 name:           hakyllbars
 version:        0.1.0.1
 synopsis:       A Hakyll compiler for Handlebars-like templates
-description:    Please see the README at <https://github.com/keywordsalad/hakyllbars#readme>
+description:    Hakyllbars brings a handlebars-like template syntax to Hakyll. Please see the
+                README at <https://github.com/keywordsalad/hakyllbars#readme>
 category:       Web
 author:         Logan McGrath
 maintainer:     logan.mcgrath@thisfieldwas.green
@@ -82,6 +83,7 @@ library
       TemplateHaskell
       TupleSections
       TypeFamilies
+      TypeOperators
       TypeSynonymInstances
       UndecidableInstances
       ViewPatterns
@@ -153,6 +155,7 @@ executable site
       TemplateHaskell
       TupleSections
       TypeFamilies
+      TypeOperators
       TypeSynonymInstances
       UndecidableInstances
       ViewPatterns
@@ -220,6 +223,7 @@ test-suite test
       TemplateHaskell
       TupleSections
       TypeFamilies
+      TypeOperators
       TypeSynonymInstances
       UndecidableInstances
       ViewPatterns
