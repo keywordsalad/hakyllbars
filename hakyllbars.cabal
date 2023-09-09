@@ -5,7 +5,7 @@ cabal-version: 1.12
 -- see: https://github.com/sol/hpack
 
 name:           hakyllbars
-version:        0.1.0.0
+version:        0.1.0.1
 synopsis:       A Hakyll compiler for Handlebars-like templates
 description:    Please see the README at <https://github.com/keywordsalad/hakyllbars#readme>
 category:       Web
@@ -85,7 +85,7 @@ library
       TypeSynonymInstances
       UndecidableInstances
       ViewPatterns
-  ghc-options: -fprint-potential-instances -Wall -Werror -Wcompat -Widentities -Wincomplete-patterns -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wname-shadowing -Wpartial-fields -Wredundant-constraints -Wunused-packages -Wunused-type-patterns
+  ghc-options: -fprint-potential-instances -Wall -Wcompat -Widentities -Wincomplete-patterns -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wname-shadowing -Wpartial-fields -Wredundant-constraints -Wunused-packages -Wunused-type-patterns
   build-depends:
       MissingH
     , aeson
@@ -156,7 +156,7 @@ executable site
       TypeSynonymInstances
       UndecidableInstances
       ViewPatterns
-  ghc-options: -fprint-potential-instances -Wall -Werror -Wcompat -Widentities -Wincomplete-patterns -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wname-shadowing -Wpartial-fields -Wredundant-constraints -Wunused-packages -Wunused-type-patterns -threaded -rtsopts -with-rtsopts=-N -Wall
+  ghc-options: -fprint-potential-instances -Wall -Wcompat -Widentities -Wincomplete-patterns -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wname-shadowing -Wpartial-fields -Wredundant-constraints -Wunused-packages -Wunused-type-patterns -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       MissingH
     , base >=4.14 && <5
@@ -223,7 +223,7 @@ test-suite test
       TypeSynonymInstances
       UndecidableInstances
       ViewPatterns
-  ghc-options: -fprint-potential-instances -Wall -Werror -Wcompat -Widentities -Wincomplete-patterns -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wname-shadowing -Wpartial-fields -Wredundant-constraints -Wunused-packages -Wunused-type-patterns -threaded -rtsopts -with-rtsopts=-N -Wall
+  ghc-options: -fprint-potential-instances -Wall -Wcompat -Widentities -Wincomplete-patterns -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wname-shadowing -Wpartial-fields -Wredundant-constraints -Wunused-packages -Wunused-type-patterns -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.14 && <5
     , containers

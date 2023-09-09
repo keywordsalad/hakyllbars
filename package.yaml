@@ -1,5 +1,5 @@
 name: hakyllbars
-version: 0.1.0.0
+version: 0.1.0.1
 git: https://github.com/keywordsalad/hakyllbars
 license: BSD3
 author: Logan McGrath
@@ -7,6 +7,7 @@ maintainer: "logan.mcgrath@thisfieldwas.green"
 copyright: "Copyright (C) 2021-2023 Logan McGrath"
 category: Web
 synopsis: A Hakyll compiler for Handlebars-like templates
+description: Hakyllbars brings a handlebars-like template syntax to Hakyll.
 license-file: LICENSE
 
 extra-source-files:
@@ -117,7 +118,6 @@ default-extensions:
 ghc-options:
   - -fprint-potential-instances
   - -Wall
-  - -Werror
   - -Wcompat
   - -Widentities
   - -Wincomplete-patterns
