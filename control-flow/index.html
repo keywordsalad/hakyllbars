@@ -26,37 +26,37 @@
 <h2 id="conditionals">Conditionals</h2>
 <p>Conditionals in hakyllbars are expressed using the <code>if</code> helper function. Any expression may be used as a condition, and if it is <em>truthy</em> the associated block will be shown.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>{{#if published}}</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;p&gt;</span>Post published on {{published | dateAs shortDate}}.<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>Post published on {{published | dateAs shortDate}}.<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>{{#end}}</span></code></pre></div>
 <p>Conditionals may also specify a default block:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>{{#if published}}</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;p&gt;</span>Post published on {{published | dateAs shortDate}}.<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>Post published on {{published | dateAs shortDate}}.<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>{{#else}}</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;p&gt;</span>Post is in draft.<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>Post is in draft.<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>{{#end}}</span></code></pre></div>
 <p>Conditions may also be chained one after another:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>{{#if updated}}</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;p&gt;</span>Post updated on {{updated | dateAs shortDate}}.<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>Post updated on {{updated | dateAs shortDate}}.<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>{{#else if published}}</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;p&gt;</span>Post published on {{published | dateAs shortDate}}.<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>Post published on {{published | dateAs shortDate}}.<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>{{#else}}</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;p&gt;</span>Post is in draft.<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>Post is in draft.<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>{{#end}}</span></code></pre></div>
 <h2 id="loops">Loops</h2>
 <p>Loops will use a list to display a block N times. If the list expression is empty or undefined, then no block is displayed. The context scope within the block is relative to the current item in the list.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;ul&gt;</span></span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  {{#for post}}</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;li&gt;</span>{{title}} - {{published | dateAs shortDate}}<span class="kw">&lt;/li&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;</span>{{title}} - {{published | dateAs shortDate}}<span class="dt">&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  {{#end}}</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/ul&gt;</span></span></code></pre></div>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">ul</span><span class="dt">&gt;</span></span></code></pre></div>
 <p>A default block may be used if the list is empty:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;ul&gt;</span></span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  {{#for post}}</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;li&gt;</span>{{title}} - {{published | dateAs shortDate}}<span class="kw">&lt;/li&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;</span>{{title}} - {{published | dateAs shortDate}}<span class="dt">&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  {{#else}}</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;li&gt;</span>No posts published<span class="kw">&lt;/li&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;</span>No posts published<span class="dt">&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  {{#end}}</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/ul&gt;</span></span></code></pre></div>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">ul</span><span class="dt">&gt;</span></span></code></pre></div>
 </main>
 
 <footer>
