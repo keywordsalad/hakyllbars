@@ -5,6 +5,9 @@ license: BSD3
 author: Logan McGrath
 maintainer: "logan.mcgrath@thisfieldwas.green"
 copyright: "Copyright (C) 2021-2023 Logan McGrath"
+category: Web
+synopsis: A Hakyll compiler for Handlebars-like templates
+license-file: LICENSE
 
 extra-source-files:
   - README.md
@@ -13,7 +16,7 @@ description: Please see the README at <https://github.com/keywordsalad/hakyllbar
 
 dependencies:
   - base >= 4.14 && < 5
-  - hakyll >= 4.15.0.0 && < 5
+  - hakyll >= 4.16.1.0 && < 5
 
 library:
   source-dirs: src
