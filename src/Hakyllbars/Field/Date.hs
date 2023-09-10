@@ -9,11 +9,14 @@ module Hakyllbars.Field.Date
     getLastModifiedDate,
     isPublishedField,
     isUpdatedField,
+    dateFromMetadata,
+    normalizedDateTimeFormat,
+    parseTimeM',
   )
 where
 
-import qualified Data.Aeson.Key as Key
-import qualified Data.Aeson.KeyMap as KeyMap
+import Data.Aeson.Key qualified as Key
+import Data.Aeson.KeyMap qualified as KeyMap
 import Data.List (tails)
 import Data.String.Utils
 import Hakyllbars.Common
@@ -65,7 +68,7 @@ dateFormatField key timeLocale = functionField2 key f
     f (dateFormat :: String) (dateString :: String) = do
       date <- deserializeTime dateString
       return $ formatTime timeLocale dateFormat date
-    deserializeTime = parseTimeM' timeLocale normalizedFormat
+    deserializeTime = parseTimeM' timeLocale normalizedDateTimeFormat
 
 dateField :: String -> TimeLocale -> ZonedTime -> Context a
 dateField key timeLocale currentTime = field key f
@@ -82,21 +85,25 @@ publishedField :: String -> TimeLocale -> Context a
 publishedField key timeLocale = field key f
   where
     f =
-      lift . getMetadata . itemIdentifier
+      lift
+        . getMetadata
+        . itemIdentifier
         >=> tplWithCall key
-          . lift
-          . maybe (noResult $ "Tried published field " ++ show key) return
-          . dateFromMetadata timeLocale ["published", "date"]
+        . lift
+        . maybe (noResult $ "Tried published field " ++ show key) return
+        . dateFromMetadata timeLocale ["published", "date"]
 
 updatedField :: String -> TimeLocale -> Context a
 updatedField key timeLocale = field key f
   where
     f =
-      lift . getMetadata . itemIdentifier
+      lift
+        . getMetadata
+        . itemIdentifier
         >=> tplWithCall key
-          . lift
-          . maybe (noResult $ "Tried updated field " ++ show key) return
-          . dateFromMetadata timeLocale ["updated", "published", "date"]
+        . lift
+        . maybe (noResult $ "Tried updated field " ++ show key) return
+        . dateFromMetadata timeLocale ["updated", "published", "date"]
 
 getLastModifiedDate :: TimeLocale -> Item a -> Compiler ZonedTime
 getLastModifiedDate timeLocale item = do
@@ -137,10 +144,10 @@ parseTimeM' :: (MonadFail m) => TimeLocale -> String -> String -> m ZonedTime
 parseTimeM' = parseTimeM True
 
 normalizedTime :: TimeLocale -> ZonedTime -> String
-normalizedTime = flip formatTime normalizedFormat
+normalizedTime = flip formatTime normalizedDateTimeFormat
 
-normalizedFormat :: String
-normalizedFormat = "%Y-%m-%dT%H:%M:%S%Ez"
+normalizedDateTimeFormat :: String
+normalizedDateTimeFormat = "%Y-%m-%dT%H:%M:%S%Ez"
 
 rfc822DateFormat :: String
 rfc822DateFormat = "%a, %d %b %Y %H:%M:%S %Z"
@@ -148,7 +155,7 @@ rfc822DateFormat = "%a, %d %b %Y %H:%M:%S %Z"
 metadataDateFormats :: [String]
 metadataDateFormats =
   [ "%Y-%m-%d",
-    normalizedFormat,
+    normalizedDateTimeFormat,
     "%Y-%m-%dT%H:%M:%S",
     "%Y-%m-%d %H:%M:%S %EZ",
     "%Y-%m-%d %H:%M:%S%Ez",
@@ -170,11 +177,13 @@ isPublishedField key = field key f
   where
     f item = lift do
       getMetadata (itemIdentifier item)
-        <&> isJust . KeyMap.lookup (Key.fromString "published")
+        <&> isJust
+        . KeyMap.lookup (Key.fromString "published")
 
 isUpdatedField :: String -> Context a
 isUpdatedField key = field key f
   where
     f item = lift do
       getMetadata (itemIdentifier item)
-        <&> isJust . KeyMap.lookup (Key.fromString "updated")
+        <&> isJust
+        . KeyMap.lookup (Key.fromString "updated")

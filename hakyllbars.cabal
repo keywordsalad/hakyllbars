@@ -105,8 +105,8 @@ library
     , parsec >=3.1.15 && <3.2
     , process >=1.6.16 && <1.7
     , scientific >=0.3.7 && <0.4
-    , text >=2.0.2 && <3
-    , time >=1.12 && <2
+    , text >=2.0.2 && <2.1
+    , time ==1.12.*
     , unordered-containers >=0.2.19 && <0.3
     , vector >=0.13.0 && <0.14
     , yaml >=0.11.11 && <0.12

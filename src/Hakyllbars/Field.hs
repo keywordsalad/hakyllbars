@@ -16,6 +16,7 @@ module Hakyllbars.Field
     defaultField,
     linkedTitleField,
     metadataField,
+    siteUrlField,
     urlField,
     absUrlField,
     getUrlField,
@@ -32,8 +33,8 @@ module Hakyllbars.Field
 where
 
 import Control.Monad.Except
-import qualified Data.Aeson.Key as Key
-import qualified Data.Aeson.KeyMap as KeyMap
+import Data.Aeson.Key qualified as Key
+import Data.Aeson.KeyMap qualified as KeyMap
 import Hakyllbars.Ast
 import Hakyllbars.Common
 import Hakyllbars.Compiler
@@ -51,11 +52,12 @@ defaultFields host siteRoot =
       constField "host" host,
       constField "siteRoot" siteRoot,
       pathField "path",
+      siteUrlField "siteUrl" "host" "siteRoot",
       urlField "url" "siteRoot",
       absUrlField "absUrl" "host" "url",
       getUrlField "getUrl" "siteRoot",
       getAbsUrlField "getAbsUrl" "host" "getUrl",
-      linkedTitleField "linkedTitle" "title" "absUrl",
+      linkedTitleField "linkedTitle" "title" "url",
       escapeHtmlField,
       escapeHtmlUriField,
       putField "put",
@@ -164,16 +166,20 @@ defaultField key = functionField2 key f
         False -> default'
 
 linkedTitleField :: String -> String -> String -> Context String
-linkedTitleField key titleKey absUrlKey = constField key f
+linkedTitleField key titleKey urlKey = constField key f
   where
     f :: FunctionValue String String String
     f filePath = do
       tplWithItem (Item (fromFilePath filePath) "") do
-        makeLink <$> getField titleKey <*> getField absUrlKey
-    getField key' = do
-      context <- tplContext
-      fromValue =<< unContext context key'
-    makeLink title url = "<a href=\"" ++ url ++ "\" title=\"" ++ escapeHtml title ++ "\">" ++ escapeHtml title ++ "</a>"
+        makeLink <$> getField titleKey <*> getField urlKey
+      where
+        getField key' = do
+          context <- tplContext
+          fromValue =<< unContext context key'
+        makeLink title url
+          | ".html" `isSuffixOf` filePath = "<a href=\"" ++ escapeHtml url ++ "\" title=\"" ++ escapeHtml title ++ "\">" ++ escapeHtml title ++ "</a>"
+          | ".md" `isSuffixOf` filePath = "[" ++ title ++ "](" ++ url ++ " \"" ++ title ++ "\")"
+          | otherwise = title ++ " <" ++ url ++ ">"
 
 metadataField :: forall a. Context a
 metadataField = Context f
@@ -190,6 +196,15 @@ getMetadataField key item = do
 
 bodyField :: String -> Context String
 bodyField key = field key $ return . itemBody
+
+siteUrlField :: String -> String -> String -> Context a
+siteUrlField key hostKey siteRootKey = field key f
+  where
+    f _ = do
+      context <- tplContext
+      host <- fromValue =<< unContext context hostKey
+      siteRoot <- fromValue =<< unContext context siteRootKey
+      return (host ++ siteRoot :: String)
 
 urlField :: String -> String -> Context a
 urlField key siteRootKey = field key f

@@ -20,6 +20,10 @@ The site hostname. This variable is configurable.
 
 The root of the site, consisting of the hostname and any path. This variable is configurable.
 
+### `siteUrl`
+
+The absolute url to the site root. A helper that concatenates `{{host}}{{siteRoot}}`.
+
 ### `path`
 
 The path to the current item being compiled.
