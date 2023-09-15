@@ -45,6 +45,7 @@ import Hakyllbars.Field.Html (escapeHtmlField, escapeHtmlUriField)
 import Hakyllbars.Util (stripSuffix)
 import System.FilePath
 
+-- | The default recommended fields to use for your website templates.
 defaultFields :: String -> String -> Context String
 defaultFields host siteRoot =
   mconcat
@@ -78,12 +79,15 @@ defaultFields host siteRoot =
       constField "description" ("" :: String)
     ]
 
+-- | An empty string context value.
 emptyString :: ContextValue a
 emptyString = intoValue ("" :: String)
 
+-- | A context with the given keys and empty string values.
 defaultKeys :: [String] -> Context a
 defaultKeys keys = intoContext $ (,"" :: String) <$> keys
 
+-- | Sets a scope in which the given fields are active in the context.
 withField :: String -> Context String
 withField key = functionField2 key f
   where
@@ -91,6 +95,7 @@ withField key = functionField2 key f
       tplWithContext context do
         reduceBlocks blocks
 
+-- | Includes the given file in the template.
 includeField :: String -> Maybe FilePath -> Maybe FilePath -> Context String
 includeField key basePath extension = functionField key f
   where
@@ -102,6 +107,7 @@ includeField key basePath extension = functionField key f
       applyTemplate (fromFilePath filePath'')
       itemValue context <$> tplPopItem
 
+-- | Sets a layout to interpolate the template into.
 layoutField :: String -> FilePath -> Maybe FilePath -> Context String
 layoutField key basePath extension = functionField2 key f
   where
@@ -114,12 +120,15 @@ layoutField key basePath extension = functionField2 key f
       tplWithItem item do
         reduceBlocks bs
 
+-- | Conditionally renders a block.
 ifField :: forall a. String -> Context a
 ifField key = functionField key isTruthy
 
+-- | Context field for iterating over a list of items.
 forField :: String -> Context String
 forField key = functionField2 key applyForLoop
 
+-- | Iterates over a list of items, applying their context to the given block.
 applyForLoop :: ContextValue String -> [Block] -> TemplateRunner String (Maybe String)
 applyForLoop items blocks =
   getAsItems items
@@ -134,9 +143,11 @@ applyForLoop items blocks =
             tplWithItem item do
               reduceBlocks blocks
 
+-- | Gets a context value as a list of items.
 getAsItems :: ContextValue String -> TemplateRunner String (Context String, [Item String])
 getAsItems = fromValue
 
+-- | Gets a context value as a list of strings.
 getAsStrings :: ContextValue String -> TemplateRunner String (Context String, [Item String])
 getAsStrings x = do
   bodies <- fromValue x :: TemplateRunner String [String]
@@ -157,6 +168,7 @@ forEachField key = functionField3 key f
       StringValue k -> return k
       _ -> tplFail "forEach: key must be a string or identifier"
 
+-- | Gets a default context value if none is provided.
 defaultField :: forall a. String -> Context a
 defaultField key = functionField2 key f
   where
@@ -165,6 +177,7 @@ defaultField key = functionField2 key f
         True -> arg
         False -> default'
 
+-- | Creates a link with the title to the given item.
 linkedTitleField :: String -> String -> String -> Context String
 linkedTitleField key titleKey urlKey = constField key f
   where
@@ -194,9 +207,11 @@ getMetadataField key item = do
     (return . intoValue)
     (KeyMap.lookup (Key.fromString key) m)
 
+-- | The body of the current item.
 bodyField :: String -> Context String
 bodyField key = field key $ return . itemBody
 
+-- | The absolute url to the site root.
 siteUrlField :: String -> String -> String -> Context a
 siteUrlField key hostKey siteRootKey = field key f
   where
@@ -206,16 +221,19 @@ siteUrlField key hostKey siteRootKey = field key f
       siteRoot <- fromValue =<< unContext context siteRootKey
       return (host ++ siteRoot :: String)
 
+-- | The url path to the given item.
 urlField :: String -> String -> Context a
 urlField key siteRootKey = field key f
   where
     f = getUri key siteRootKey . itemIdentifier
 
+-- | Gets the url path to the given item file path.
 getUrlField :: String -> String -> Context a
 getUrlField key siteRootKey = functionField key f
   where
     f = getUri key siteRootKey . fromFilePath
 
+-- | Gets the uri to the given item identifier.
 getUri :: String -> String -> Identifier -> TemplateRunner a String
 getUri key siteRootKey id' = do
   siteRoot <-
@@ -231,6 +249,7 @@ getUri key siteRootKey id' = do
   let uri = stripSuffix "index.html" definitelyRoute
   return if null uri then siteRoot else siteRoot ++ uri
 
+-- | Gets the absolute url to the current item.
 absUrlField :: String -> String -> String -> Context a
 absUrlField key hostKey urlKey = field key f
   where
@@ -240,6 +259,7 @@ absUrlField key hostKey urlKey = field key f
       url <- fromValue =<< unContext context urlKey
       return (host ++ url :: String)
 
+-- | Gets the absolute url to the given item file path.
 getAbsUrlField :: forall a. String -> String -> String -> Context a
 getAbsUrlField key hostKey getUrlKey = functionField key f
   where
@@ -250,14 +270,20 @@ getAbsUrlField key hostKey getUrlKey = functionField key f
       url <- getUrl (intoValue filePath :: ContextValue a)
       return (host ++ url :: String)
 
+-- | Gets the destination path to the current item.
 pathField :: String -> Context a
 pathField key = field key $ return . toFilePath . itemIdentifier
 
+-- | Gets the title of the current item from the file name.
 titleFromFileField :: String -> Context a
 titleFromFileField = bindField titleFromPath . pathField
   where
     titleFromPath = return . takeBaseName
 
+-- | Extracts the teaser from the current item.
+--
+-- The teaser is noted in the item body with the HTML comment `<!--more-->`. All
+-- content preceding this comment is considered the teaser.
 teaserField :: String -> Snapshot -> Context String
 teaserField key snapshot = field key f
   where
@@ -273,7 +299,13 @@ teaserField key snapshot = field key f
           | otherwise = go (x : acc) xs
         go _ [] = Nothing
 
-metadataPriorityField :: String -> [String] -> Context a
+-- | Gets the value of the first metadata key that exists.
+metadataPriorityField ::
+  -- | The context key.
+  String ->
+  -- | The list of metadata keys to try in order of priority.
+  [String] ->
+  Context a
 metadataPriorityField key priorityKeys = field key f
   where
     f item =
@@ -296,12 +328,14 @@ addField key = functionField2 key f
       current <- tplGet name `catchError` \_ -> return []
       tplPut $ constField name (value : current)
 
+-- | Puts a block of content into the context by a given name.
 putBlockField :: String -> Context a
 putBlockField key = functionField2 key f
   where
     f (name :: String) (blocks :: [Block]) = do
       tplPut $ constField name blocks
 
+-- | Adds a block of content to the given context collection identified by a name.
 addBlockField :: String -> Context a
 addBlockField key = functionField2 key f
   where

@@ -24,15 +24,23 @@ import Hakyllbars.Context
 import Hakyllbars.Util
 
 data DateConfig = DateConfig
-  { dateConfigLocale :: TimeLocale,
+  { -- | The locale to use for date formatting.
+    dateConfigLocale :: TimeLocale,
+    -- | The current time (or time at which the site generator is running).
     dateConfigCurrentTime :: ZonedTime,
+    -- | The format to use for long dates (i.e. date with time).
     dateConfigDateLongFormat :: String,
+    -- | The format to use for short dates (i.e. date without time).
     dateConfigDateShortFormat :: String,
+    -- | The format to use for time only.
     dateConfigTimeFormat :: String,
+    -- | The format to use for machine-readable dates.
     dateConfigRobotDateFormat :: String,
+    -- | The format to use for machine-readable times.
     dateConfigRobotTimeFormat :: String
   }
 
+-- | Creates a default date configuration with the given locale and current time.
 defaultDateConfigWith :: TimeLocale -> ZonedTime -> DateConfig
 defaultDateConfigWith locale currentTime =
   DateConfig
@@ -45,6 +53,7 @@ defaultDateConfigWith locale currentTime =
       dateConfigRobotTimeFormat = "%Y-%m-%dT%H:%M:%S%Ez"
     }
 
+-- | Creates a default date fields configuration with the given date config.
 dateFields :: DateConfig -> Context a
 dateFields config =
   mconcat
@@ -62,6 +71,7 @@ dateFields config =
       dateFormatField "dateAs" (dateConfigLocale config)
     ]
 
+-- | Gets a date formatted with the given format.
 dateFormatField :: String -> TimeLocale -> Context a
 dateFormatField key timeLocale = functionField2 key f
   where
@@ -70,6 +80,7 @@ dateFormatField key timeLocale = functionField2 key f
       return $ formatTime timeLocale dateFormat date
     deserializeTime = parseTimeM' timeLocale normalizedDateTimeFormat
 
+-- | Gets the date relative to the configured time locale and current time from the "date" or "published" fields.
 dateField :: String -> TimeLocale -> ZonedTime -> Context a
 dateField key timeLocale currentTime = field key f
   where
@@ -81,6 +92,7 @@ dateField key timeLocale currentTime = field key f
           maybe (dateFromFilePath timeLocale item) return maybeDateString
             <|> return (formatTime timeLocale "%Y-%m-%dT%H:%M:%S%Ez" currentTime)
 
+-- | Gets the published date of an item from the metadata fields "published" or "date".
 publishedField :: String -> TimeLocale -> Context a
 publishedField key timeLocale = field key f
   where
@@ -93,6 +105,7 @@ publishedField key timeLocale = field key f
         . maybe (noResult $ "Tried published field " ++ show key) return
         . dateFromMetadata timeLocale ["published", "date"]
 
+-- | Gets the updated date of an item from the metadata fields "updated", "published", or "date".
 updatedField :: String -> TimeLocale -> Context a
 updatedField key timeLocale = field key f
   where
@@ -105,6 +118,8 @@ updatedField key timeLocale = field key f
         . maybe (noResult $ "Tried updated field " ++ show key) return
         . dateFromMetadata timeLocale ["updated", "published", "date"]
 
+-- | Gets the last modified date of an item from the metadata fields "updated", "published", or "date", or the file path
+-- if it contains a date.
 getLastModifiedDate :: TimeLocale -> Item a -> Compiler ZonedTime
 getLastModifiedDate timeLocale item = do
   metadata <- getMetadata $ itemIdentifier item
@@ -112,7 +127,14 @@ getLastModifiedDate timeLocale item = do
   dateString <- maybe (dateFromFilePath timeLocale item) return maybeDateString
   parseTimeM' timeLocale "%Y-%m-%dT%H:%M:%S%Ez" dateString
 
-dateFromMetadata :: TimeLocale -> [String] -> Metadata -> Maybe String
+-- | Gets a date from the given metadata fields.
+dateFromMetadata ::
+  -- | The time locale to use.
+  TimeLocale ->
+  -- | The list of metadata keys to search for.
+  [String] ->
+  Metadata ->
+  Maybe String
 dateFromMetadata timeLocale sourceKeys metadata =
   firstAlt $ findDate <$> sourceKeys
   where
@@ -123,6 +145,7 @@ dateFromMetadata timeLocale sourceKeys metadata =
       return $ normalizedTime timeLocale date
     parse = flip $ parseTimeM True timeLocale
 
+-- | Gets a date from the item's file path.
 dateFromFilePath :: TimeLocale -> Item a -> Compiler String
 dateFromFilePath timeLocale item =
   dateFromPath
@@ -152,6 +175,7 @@ normalizedDateTimeFormat = "%Y-%m-%dT%H:%M:%S%Ez"
 rfc822DateFormat :: String
 rfc822DateFormat = "%a, %d %b %Y %H:%M:%S %Z"
 
+-- | Supported date formats to read from metadata.
 metadataDateFormats :: [String]
 metadataDateFormats =
   [ "%Y-%m-%d",
@@ -172,6 +196,7 @@ metadataDateFormats =
     "%b %d, %Y"
   ]
 
+-- | Gets whether the item is published.
 isPublishedField :: String -> Context a
 isPublishedField key = field key f
   where
@@ -180,6 +205,7 @@ isPublishedField key = field key f
         <&> isJust
         . KeyMap.lookup (Key.fromString "published")
 
+-- | Gets whether the item has been updated.
 isUpdatedField :: String -> Context a
 isUpdatedField key = field key f
   where

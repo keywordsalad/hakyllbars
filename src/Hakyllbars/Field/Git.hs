@@ -17,7 +17,13 @@ import Hakyllbars.Context
 import System.Exit
 import System.Process
 
-gitFields :: String -> String -> Context a
+-- | The Git fields configuration.
+gitFields ::
+  -- | The configured hakyll provider directory.
+  String ->
+  -- | The base url to the online git repository for browsing.
+  String ->
+  Context a
 gitFields providerDirectory gitWebUrl =
   mconcat
     [ constField "gitWebUrl" gitWebUrl,
@@ -30,14 +36,17 @@ gitFields providerDirectory gitWebUrl =
       gitFileField providerDirectory "isChanged" gitFileIsChanged
     ]
 
+-- | Gets the git-sha1 hash of the current item.
 gitSha1Compiler :: String -> Item a -> TemplateRunner a String
 gitSha1Compiler = gitLogField "%h"
 
+-- | Gets the git commit message of the current item.
 gitMessageCompiler :: String -> Item a -> TemplateRunner a String
 gitMessageCompiler = gitLogField "%s"
 
 type LogFormat = String
 
+-- | Extracts a latest git log field from the current item.
 gitLogField :: LogFormat -> String -> Item a -> TemplateRunner a String
 gitLogField format providerDirectory item =
   lift $ unsafeCompiler do
@@ -57,10 +66,25 @@ instance Binary GitFile where
   get = GitFile <$> get <*> get <*> get
   put (GitFile x y z) = put x >> put y >> put z
 
-gitFileField :: (IntoValue v a) => String -> String -> (GitFile -> v) -> Context a
+-- | gets a given field from the git file.
+gitFileField ::
+  (IntoValue v a) =>
+  -- | The hakyll provider directory.
+  String ->
+  -- | The field name.
+  String ->
+  -- | The getter for the git file field.
+  (GitFile -> v) ->
+  Context a
 gitFileField providerDirectory key f = field key $ fmap f . gitFileCompiler providerDirectory
 
-gitFileCompiler :: String -> Item a -> TemplateRunner a GitFile
+-- | Compiles the git file for the given item.
+gitFileCompiler ::
+  -- | The hakyll provider directory.
+  String ->
+  -- | The item to compile.
+  Item a ->
+  TemplateRunner a GitFile
 gitFileCompiler providerDirectory item =
   lift $
     GitFile gitFilePath
