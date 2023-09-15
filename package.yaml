@@ -36,13 +36,13 @@ library:
     - process              >= 1.6.16  && < 1.7
     - scientific           >= 0.3.7   && < 0.4
     - text                 >= 2.0.2   && < 2.1
-    - time                 >= 1.12    && < 1.13
+    - time                 >= 1.12.2  && < 1.13
     - unordered-containers >= 0.2.19  && < 0.3
     - vector               >= 0.13.0  && < 0.14
     - yaml                 >= 0.11.11 && < 0.12
 
 executables:
-  site:
+  hakyllbars-site:
     source-dirs: site
     main: Main.hs
     ghc-options:
@@ -50,11 +50,11 @@ executables:
       - -rtsopts
       - -with-rtsopts=-N
     dependencies:
-      - hakyll
+      - hakyll               >= 4.16.1  && < 4.17
       - hakyllbars
-      - MissingH
-      - pandoc
-      - time
+      - MissingH             >= 1.6.0   && < 1.7
+      - pandoc               >= 3.0.1   && < 3.2
+      - time                 >= 1.12.2  && < 1.13
 
 tests:
   test:
@@ -65,12 +65,12 @@ tests:
       - -rtsopts
       - -with-rtsopts=-N
     dependencies:
-      - containers
-      - hakyll
+      - containers           >= 0.6.7   && < 0.7
+      - hakyll               >= 4.16.1  && < 4.17
       - hakyllbars
-      - hspec
-      - parsec
-      - time
+      - hspec                >= 2.10.10 && < 2.11
+      - parsec               >= 3.1.15  && < 3.2
+      - time                 >= 1.12.2  && < 1.13
 
 default-extensions:
   - BangPatterns

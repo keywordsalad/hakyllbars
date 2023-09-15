@@ -106,13 +106,13 @@ library
     , process >=1.6.16 && <1.7
     , scientific >=0.3.7 && <0.4
     , text >=2.0.2 && <2.1
-    , time ==1.12.*
+    , time >=1.12.2 && <1.13
     , unordered-containers >=0.2.19 && <0.3
     , vector >=0.13.0 && <0.14
     , yaml >=0.11.11 && <0.12
   default-language: Haskell2010
 
-executable site
+executable hakyllbars-site
   main-is: Main.hs
   other-modules:
       Paths_hakyllbars
@@ -163,12 +163,12 @@ executable site
       ViewPatterns
   ghc-options: -fprint-potential-instances -Wall -Wcompat -Widentities -Wincomplete-patterns -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wname-shadowing -Wpartial-fields -Wredundant-constraints -Wunused-packages -Wunused-type-patterns -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      MissingH
+      MissingH >=1.6.0 && <1.7
     , base >=4.14 && <5
-    , hakyll
+    , hakyll >=4.16.1 && <4.17
     , hakyllbars
-    , pandoc
-    , time
+    , pandoc >=3.0.1 && <3.2
+    , time >=1.12.2 && <1.13
   default-language: Haskell2010
 
 test-suite test
@@ -233,10 +233,10 @@ test-suite test
   ghc-options: -fprint-potential-instances -Wall -Wcompat -Widentities -Wincomplete-patterns -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wname-shadowing -Wpartial-fields -Wredundant-constraints -Wunused-packages -Wunused-type-patterns -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.14 && <5
-    , containers
-    , hakyll
+    , containers >=0.6.7 && <0.7
+    , hakyll >=4.16.1 && <4.17
     , hakyllbars
-    , hspec
-    , parsec
-    , time
+    , hspec >=2.10.10 && <2.11
+    , parsec >=3.1.15 && <3.2
+    , time >=1.12.2 && <1.13
   default-language: Haskell2010

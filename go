@@ -27,7 +27,7 @@ _verify-prerequisites () {
 ⚡build () {
   _help-line "Compile hakyllbars and generate the site"
   stack build
-  stack exec site build -- "$@"
+  stack exec hakyllbars-site build -- "$@"
 }
 
 ⚡clean () {
@@ -62,13 +62,13 @@ _verify-prerequisites () {
 ⚡watch () {
   _help-line "Build the site generator, generate the site, and then run the preview server"
   ⚡build
-  stack exec site watch -- "$@"
+  stack exec hakyllbars-site watch -- "$@"
 }
 
 ⚡rewatch() {
   _help-line "Rebuild the site generator, regenerate the site, and then run the preview server"
   ⚡rebuild
-  stack exec site watch -- "$@"
+  stack exec hakyllbars-site watch -- "$@"
 }
 
 ⚡kill() {
