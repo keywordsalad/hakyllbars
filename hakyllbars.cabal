@@ -181,10 +181,6 @@ test-suite test
       Hakyllbars.Source.ParserSpec
       Hakyllbars.Source.TestSupport
       Hakyllbars.TestSupport
-      Hakyllbars.TestSupport.Compiler
-      Hakyllbars.TestSupport.Config
-      Hakyllbars.TestSupport.Resource
-      Hakyllbars.TestSupport.TestEnv
       Paths_hakyllbars
   hs-source-dirs:
       test
@@ -234,10 +230,7 @@ test-suite test
   ghc-options: -fprint-potential-instances -Wall -Wcompat -Widentities -Wincomplete-patterns -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wname-shadowing -Wpartial-fields -Wredundant-constraints -Wunused-packages -Wunused-type-patterns -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.14 && <5
-    , containers >=0.6.7 && <0.7
-    , hakyll >=4.16.1 && <4.17
     , hakyllbars
     , hspec >=2.10.10 && <2.11
     , parsec >=3.1.15 && <3.2
-    , time >=1.12.2 && <1.13
   default-language: Haskell2010
