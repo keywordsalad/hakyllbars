@@ -22,7 +22,7 @@ The root of the site, consisting of the hostname and any path. This variable is 
 
 ### `siteUrl`
 
-The absolute url to the site root. A helper that concatenates `{{host}}{{siteRoot}}`.
+The absolute url to the site root. A helper that concatenates `{{*{{host}}{{siteRoot}}}}`.
 
 ### `path`
 
