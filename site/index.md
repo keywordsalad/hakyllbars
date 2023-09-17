@@ -9,12 +9,34 @@ I created my own template language that allows me to specify complex includes, l
 
 _See hakyll's own template docs [here](https://jaspervdj.be/hakyll/tutorials/04-compilers.html)._
 
-**Hakyllbars supports the following:**
+## What are hakyllbars?
 
-* [Variables]({{getUrl 'variables.md'}})
-* [Helper functions]({{getUrl 'helper-functions.md'}})
-* [Layouts]({{getUrl 'layouts.md'}})
-* [Control flow]({{getUrl 'control-flow.md'}})
+Hakyllbars are double curly-braces `\{{` and `\}}` which can be used to interpolate expressions into templates.
+
+**Special forms of curly braces are capable of different things.**
+
+There are a set of default **[variables]({{getUrl 'variables.md'}})** and **[helper functions]({{getUrl 'helper-functions.md'}})** available for use with bare `\{{` and `\}}`.
+
+**[Layouts]({{getUrl 'layouts.md'}})** are applied by using `\{{@` and `\}}`, which captures all content following the closing `\}}` and passes it as a syntax block to the function between the hakyllbars:
+
+```{{*
+{{@applyLayout "blog-post.html"}}
+This will get the blog post treatment.
+}}```
+
+**[Control flow]({{getUrl 'control-flow.md'}})** is applied by using `\{{#` and `\}}`, which captures all content up to a following `\{{#end\}}` and passes it as a syntax block to the function between the opening hakyllbars.
+
+```{{*
+{{#if published}}
+  This article was published on {{published}} by {{author}}.
+{{#end}}
+
+{{#for posts}}
+  {{title}} - {{url}}
+{{#else}}
+  No posts found.
+{{#end}}
+}}```
 
 ## Getting started
 
