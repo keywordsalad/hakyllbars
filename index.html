@@ -26,52 +26,62 @@
 <p><a href="https://jaspervdj.be/hakyll/">hakyll</a>’s own templating language is very simple. It doesn’t permit functions or provide a means to extend its syntax. Simple templates are easy to define and include, but I want something more expressive.</p>
 <p>I created my own template language that allows me to specify complex includes, layouts, and define functions. The syntax is inspired by <a href="https://handlebarsjs.com">HandlebarsJS</a>, so I call it <em>hakyllbars</em>!</p>
 <p><em>See hakyll’s own template docs <a href="https://jaspervdj.be/hakyll/tutorials/04-compilers.html">here</a>.</em></p>
-<p><strong>Hakyllbars supports the following:</strong></p>
-<ul>
-<li><a href="/hakyllbars/variables/">Variables</a></li>
-<li><a href="/hakyllbars/helper-functions/">Helper functions</a></li>
-<li><a href="/hakyllbars/layouts/">Layouts</a></li>
-<li><a href="/hakyllbars/control-flow/">Control flow</a></li>
-</ul>
+<h2 id="what-are-hakyllbars">What are hakyllbars?</h2>
+<p>Hakyllbars are double curly-braces <code>{{</code> and <code>}}</code> which can be used to interpolate expressions into templates.</p>
+<p><strong>Special forms of curly braces are capable of different things.</strong></p>
+<p>There are a set of default <strong><a href="/hakyllbars/variables/">variables</a></strong> and <strong><a href="/hakyllbars/helper-functions/">helper functions</a></strong> available for use with bare <code>{{</code> and <code>}}</code>.</p>
+<p><strong><a href="/hakyllbars/layouts/">Layouts</a></strong> are applied by using <code>{{@</code> and <code>}}</code>, which captures all content following the closing <code>}}</code> and passes it as a syntax block to the function between the hakyllbars:</p>
+<pre><code>{{@applyLayout &quot;blog-post.html&quot;}}
+This will get the blog post treatment.</code></pre>
+<p><strong><a href="/hakyllbars/control-flow/">Control flow</a></strong> is applied by using <code>{{#</code> and <code>}}</code>, which captures all content up to a following <code>{{#end}}</code> and passes it as a syntax block to the function between the opening hakyllbars.</p>
+<pre><code>{{#if published}}
+  This article was published on {{published}} by {{author}}.
+{{#end}}
+
+{{#for posts}}
+  {{title}} - {{url}}
+{{#else}}
+  No posts found.
+{{#end}}</code></pre>
 <h2 id="getting-started">Getting started</h2>
 <p>Here’s some basic boilerplate to leverage Hakyllbars in your site:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Hakyllbars</span> <span class="kw">as</span> <span class="dt">HB</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Time</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Sets up configuration for the date fields</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  time <span class="ot">&lt;-</span> utcToZonedTime <span class="op">&lt;$&gt;</span> getCurrentTimeZone <span class="op">&lt;*&gt;</span> getCurrentTime</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> dateConfig <span class="ot">=</span> HB.defaultDateConfigWith defaultTimeLocale time</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  match <span class="st">&quot;*.md&quot;</span> <span class="kw">do</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    route <span class="op">$</span> setExtension <span class="st">&quot;html&quot;</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- This is where Hakyllbars is applied</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    compile <span class="kw">do</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      getResourceBody <span class="op">&gt;&gt;=</span> HB.applyTemplates <span class="kw">do</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- Sets the root context used in the templates</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        HB.applyContext context</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- Applies the item content as a template</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        HB.applyContent</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    context dateConfig <span class="ot">=</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>      <span class="co">-- Sets up the git fields</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>      HB.gitFields providerDirectory gitWebUrl</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- Sets up the date fields</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;&gt;</span> HB.dateFields dateConfig</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- Using the default fields is very recommended</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;&gt;</span> HB.defaultFields host siteRoot</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    providerDirectory <span class="ot">=</span> <span class="st">&quot;site&quot;</span> <span class="co">-- where your Hakyll files live</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    gitWebUrl <span class="ot">=</span> <span class="st">&quot;https://github.com/keywordsalad/hakyllbars/tree&quot;</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    host <span class="ot">=</span> <span class="st">&quot;https://keywordsalad.github.io&quot;</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    siteRoot <span class="ot">=</span> <span class="st">&quot;/hakyllbars&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Hakyllbars</span> <span class="kw">as</span> <span class="dt">HB</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Time</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Sets up configuration for the date fields</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  time <span class="ot">&lt;-</span> utcToZonedTime <span class="op">&lt;$&gt;</span> getCurrentTimeZone <span class="op">&lt;*&gt;</span> getCurrentTime</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> dateConfig <span class="ot">=</span> HB.defaultDateConfigWith defaultTimeLocale time</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  match <span class="st">&quot;*.md&quot;</span> <span class="kw">do</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    route <span class="op">$</span> setExtension <span class="st">&quot;html&quot;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- This is where Hakyllbars is applied</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    compile <span class="kw">do</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>      getResourceBody <span class="op">&gt;&gt;=</span> HB.applyTemplates <span class="kw">do</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- Sets the root context used in the templates</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        HB.applyContext context</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- Applies the item content as a template</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        HB.applyContent</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    context dateConfig <span class="ot">=</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>      <span class="co">-- Sets up the git fields</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>      HB.gitFields providerDirectory gitWebUrl</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- Sets up the date fields</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;&gt;</span> HB.dateFields dateConfig</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- Using the default fields is very recommended</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;&gt;</span> HB.defaultFields host siteRoot</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    providerDirectory <span class="ot">=</span> <span class="st">&quot;site&quot;</span> <span class="co">-- where your Hakyll files live</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    gitWebUrl <span class="ot">=</span> <span class="st">&quot;https://github.com/keywordsalad/hakyllbars/tree&quot;</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    host <span class="ot">=</span> <span class="st">&quot;https://keywordsalad.github.io&quot;</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    siteRoot <span class="ot">=</span> <span class="st">&quot;/hakyllbars&quot;</span></span></code></pre></div>
 </main>
 
 <footer>
   <p class="copyright">Copyright &copy; <span class="copyright-date">2021</span> Logan McGrath. All rights reserved.</p>
   <p class="hakyll">Site proudly generated by <a href="https://jaspervdj.be/hakyll">hakyll</a> with <a href="https://keywordsalad.github.io/hakyllbars">hakyllbars</a>.</p>
-  <p class="git">This page was rendered from <a href="https://github.com/keywordsalad/hakyllbars/tree/d89e3e6/site/index.md">index.md</a> at commit <a class="commit-link" href="https://github.com/keywordsalad/hakyllbars/tree/d89e3e6">d89e3e6</a>.</p>
+  <p class="git">This page was rendered from <a href="https://github.com/keywordsalad/hakyllbars/tree/9655e61/site/index.md">index.md</a> at commit <a class="commit-link" href="https://github.com/keywordsalad/hakyllbars/tree/9655e61">9655e61</a>.</p>
 </footer>
 
 </body>
