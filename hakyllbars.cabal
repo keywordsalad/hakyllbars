@@ -8,7 +8,7 @@ name:           hakyllbars
 version:        1.0.0.2
 synopsis:       A Hakyll compiler for Handlebars-like templates
 description:    Hakyllbars brings a handlebars-like template syntax to Hakyll. Please see the
-                README at <https://github.com/keywordsalad/hakyllbars#readme>
+                documentation at <https://keywordsalad.github.io/hakyllbars/>
 category:       Web
 author:         Logan McGrath
 maintainer:     logan.mcgrath@thisfieldwas.green
