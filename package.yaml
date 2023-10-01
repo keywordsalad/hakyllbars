@@ -9,7 +9,7 @@ category: Web
 synopsis: A Hakyll compiler for Handlebars-like templates
 description: |
   Hakyllbars brings a handlebars-like template syntax to Hakyll. Please see the
-  README at <https://github.com/keywordsalad/hakyllbars#readme>
+  documentation at <https://keywordsalad.github.io/hakyllbars/>
 license-file: LICENSE
 
 extra-source-files:
