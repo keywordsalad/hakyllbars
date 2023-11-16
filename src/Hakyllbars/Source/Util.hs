@@ -1,7 +1,7 @@
 module Hakyllbars.Source.Util where
 
 import Control.Monad (when)
-import Control.Monad.Identity
+import Control.Monad.Identity hiding (when)
 import Data.Default
 import Text.Parsec hiding (label, runParser, token, (<?>))
 import qualified Text.Parsec as P
