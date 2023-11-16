@@ -92,7 +92,7 @@ library
   ghc-options: -fprint-potential-instances -Wall -Wcompat -Widentities -Wincomplete-patterns -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wname-shadowing -Wpartial-fields -Wredundant-constraints -Wunused-packages -Wunused-type-patterns
   build-depends:
       MissingH >=1.6.0 && <1.7
-    , aeson >=2.1.2 && <2.2
+    , aeson >=2.1.2 && <2.3
     , base >=4.14 && <5
     , binary >=0.8.9 && <0.9
     , bytestring >=0.11.3 && <0.12
