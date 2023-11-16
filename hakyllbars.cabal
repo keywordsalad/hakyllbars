@@ -5,7 +5,7 @@ cabal-version: 1.12
 -- see: https://github.com/sol/hpack
 
 name:           hakyllbars
-version:        1.0.0.2
+version:        1.0.1.0
 synopsis:       A Hakyll compiler for Handlebars-like templates
 description:    Hakyllbars brings a handlebars-like template syntax to Hakyll. Please see the
                 documentation at <https://keywordsalad.github.io/hakyllbars/>
